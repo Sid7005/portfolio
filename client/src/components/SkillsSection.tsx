@@ -77,38 +77,18 @@ const SkillsSection = () => {
     <section id="skills" className="py-16 md:py-24 bg-gradient-to-br from-gray-50 to-gray-100">
       <div className="container mx-auto px-4">
         <motion.div 
-          className="text-center mb-16"
+          className="text-center"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5 }}
         >
-          <h2 className="text-3xl md:text-4xl font-inter font-bold">Skills & Expertise</h2>
+          <h2 className="text-3xl md:text-4xl font-inter font-bold">Skills</h2>
           <div className="h-1 w-20 bg-primary mx-auto mt-4 mb-8 rounded-full"></div>
           <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-            A comprehensive set of technical skills I've developed throughout my career as a software engineer.
+            A comprehensive set of technical skills I've developed throughout my career as a web developer.
           </p>
         </motion.div>
-        
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          <SkillCategory 
-            title="Frontend" 
-            icon={<Laptop className="w-6 h-6" />} 
-            skills={frontendSkills} 
-          />
-          
-          <SkillCategory 
-            title="Backend" 
-            icon={<Server className="w-6 h-6" />} 
-            skills={backendSkills} 
-          />
-          
-          <SkillCategory 
-            title="DevOps & Tools" 
-            icon={<Drill className="w-6 h-6" />} 
-            skills={devopsSkills} 
-          />
-        </div>
         
         {/* Additional Skills Tags */}
         <motion.div 
@@ -118,7 +98,6 @@ const SkillsSection = () => {
           viewport={{ once: true }}
           transition={{ duration: 0.5, delay: 0.3 }}
         >
-          <h3 className="text-xl font-inter font-semibold mb-6">Additional Skills</h3>
           <div className="flex flex-wrap justify-center gap-3">
             {additionalSkills.map((skill, index) => (
               <motion.span 

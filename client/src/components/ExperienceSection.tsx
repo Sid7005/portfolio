@@ -2,26 +2,26 @@ import { motion } from "framer-motion";
 import { Briefcase, GraduationCap } from "lucide-react";
 import { experience, education } from "@/lib/constants";
 
-const ExperienceTimelineItem = ({ 
-  position, 
-  company, 
-  period, 
-  description, 
+const ExperienceTimelineItem = ({
+  position,
+  company,
+  period,
+  description,
   skills,
   isEven
-}: { 
-  position: string; 
-  company: string; 
-  period: string; 
+}: {
+  position: string;
+  company: string;
+  period: string;
   description: string[];
   skills: string[];
   isEven: boolean;
 }) => {
   return (
-    <div className={`relative md:flex md:justify-between mb-12 md:mb-0 py-8 ${isEven ? 'right-timeline' : 'left-timeline'}`}>
+    <div className={`relative md:flex md:justify-between md:mb-0 py-8 ${isEven ? 'right-timeline' : 'left-timeline'}`}>
       {/* Left Content (even) or empty space (odd) */}
       {isEven ? (
-        <motion.div 
+        <motion.div
           className="md:w-5/12 bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition duration-300 md:mr-0"
           initial={{ opacity: 0, x: -50 }}
           whileInView={{ opacity: 1, x: 0 }}
@@ -47,15 +47,15 @@ const ExperienceTimelineItem = ({
       ) : (
         <div className="hidden md:block md:w-5/12"></div>
       )}
-      
+
       {/* Timeline dot */}
       <div className="hidden md:flex absolute left-1/2 transform -translate-x-1/2 -translate-y-4 w-8 h-8 rounded-full bg-primary text-white items-center justify-center">
         <Briefcase className="w-4 h-4" />
       </div>
-      
+
       {/* Right Content (odd) or empty space (even) */}
       {!isEven ? (
-        <motion.div 
+        <motion.div
           className="md:w-5/12 bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition duration-300 ml-0"
           initial={{ opacity: 0, x: 50 }}
           whileInView={{ opacity: 1, x: 0 }}
@@ -85,19 +85,19 @@ const ExperienceTimelineItem = ({
   );
 };
 
-const EducationCard = ({ 
-  degree, 
-  institution, 
-  period, 
-  gpa 
-}: { 
-  degree: string; 
-  institution: string; 
-  period: string; 
-  gpa: string 
+const EducationCard = ({
+  degree,
+  institution,
+  period,
+  gpa
+}: {
+  degree: string;
+  institution: string;
+  period: string;
+  gpa: string
 }) => {
   return (
-    <motion.div 
+    <motion.div
       className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition duration-300"
       initial={{ opacity: 0, y: 30 }}
       whileInView={{ opacity: 1, y: 0 }}
@@ -111,11 +111,8 @@ const EducationCard = ({
         <div className="ml-4">
           <h3 className="text-xl font-inter font-semibold">{degree}</h3>
           <p className="text-gray-600">{institution}</p>
+          <span className="text-gray-500">{period}</span>
         </div>
-      </div>
-      <div className="flex justify-between items-center">
-        <span className="text-gray-500">{period}</span>
-        <span className="bg-blue-100 text-primary px-3 py-1 rounded-full text-sm">GPA: {gpa}</span>
       </div>
     </motion.div>
   );
@@ -125,8 +122,8 @@ const ExperienceSection = () => {
   return (
     <section id="experience" className="py-16 md:py-24 bg-white">
       <div className="container mx-auto px-4">
-        <motion.div 
-          className="text-center mb-16"
+        <motion.div
+          className="text-center"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
@@ -138,15 +135,15 @@ const ExperienceSection = () => {
             My professional journey in the software development industry.
           </p>
         </motion.div>
-        
+
         {/* Timeline */}
         <div className="relative">
           {/* Timeline line */}
           <div className="hidden md:block absolute left-1/2 transform -translate-x-1/2 h-full w-1 bg-gray-200"></div>
-          
+
           {/* Experience Items */}
           {experience.map((exp, index) => (
-            <ExperienceTimelineItem 
+            <ExperienceTimelineItem
               key={index}
               position={exp.position}
               company={exp.company}
@@ -157,9 +154,9 @@ const ExperienceSection = () => {
             />
           ))}
         </div>
-        
+
         {/* Education */}
-        <motion.div 
+        <motion.div
           className="mt-20"
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
@@ -167,15 +164,15 @@ const ExperienceSection = () => {
           transition={{ duration: 0.5 }}
         >
           <h2 className="text-2xl md:text-3xl font-inter font-bold text-center mb-10">Education</h2>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {education.map((edu, index) => (
-              <EducationCard 
+              <EducationCard
                 key={index}
                 degree={edu.degree}
                 institution={edu.institution}
                 period={edu.period}
-                gpa={edu.gpa}
+                gpa={edu.cgpa}
               />
             ))}
           </div>

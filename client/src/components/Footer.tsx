@@ -2,6 +2,7 @@ import { Link } from "wouter";
 import { useScrollToSection } from "@/hooks/useScrollToSection";
 import { Download } from "lucide-react";
 import { FaLinkedinIn, FaGithub, FaTwitter, FaInstagram, FaMediumM } from "react-icons/fa";
+import resume from "../../assets/doc/Sid-Resume.pdf"
 
 const navLinks = [
   { href: "#home", label: "Home" },
@@ -30,9 +31,9 @@ const Footer = () => {
                 scrollToSection("#home");
               }}
             >
-              MB<span className="text-primary">.</span>
+              SC<span className="text-primary">.</span>
             </a>
-            <p className="mt-2 text-gray-400">Software Engineer</p>
+            <p className="mt-2 text-gray-400">Web Developer</p>
           </div>
           
           {/* Quick links */}
@@ -55,7 +56,7 @@ const Footer = () => {
           {/* Download CV button */}
           <div>
             <a 
-              href="/resume.pdf" 
+              href={resume} 
               className="bg-primary hover:bg-secondary text-white px-5 py-2 rounded-md transition duration-300 flex items-center"
               target="_blank"
               rel="noopener noreferrer"
@@ -69,7 +70,7 @@ const Footer = () => {
         
         <div className="flex flex-col md:flex-row justify-between items-center">
           <p className="text-gray-400 mb-4 md:mb-0">
-            &copy; {currentYear} Manish Bhanushali. All rights reserved.
+            &copy; {currentYear} Siddharajsinh Chauhan. All rights reserved.
           </p>
           
           <div className="flex gap-4">
