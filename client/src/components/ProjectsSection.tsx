@@ -4,8 +4,6 @@ import { ExternalLink, Github, Frame } from "lucide-react";
 import { projects } from "@/lib/constants";
 import { Project, ProjectCategory } from "@/lib/types";
 
-const categories: ProjectCategory[] = ["All", "Web App", "Mobile", "API", "UI/UX"];
-
 const ProjectCard = ({ project }: { project: Project }) => {
   return (
     <motion.div 
@@ -21,7 +19,7 @@ const ProjectCard = ({ project }: { project: Project }) => {
         <img 
           src={project.image} 
           alt={project.title} 
-          className="w-full h-full object-cover hover:scale-105 transition duration-500"
+          className={`w-full h-full ${project.title === 'By Best' ? 'object-contain' : 'object-cover'} hover:scale-105 transition duration-500`}
         />
       </div>
       
@@ -41,7 +39,7 @@ const ProjectCard = ({ project }: { project: Project }) => {
             </span>
           ))}
         </div>
-        <div className="flex justify-between">
+        <div className="flex justify-end">
           <a 
             href={project.demoLink} 
             target="_blank" 
@@ -49,19 +47,6 @@ const ProjectCard = ({ project }: { project: Project }) => {
             className="text-primary hover:text-secondary font-medium transition flex items-center"
           >
             <ExternalLink className="mr-2 h-4 w-4" /> {project.demoLinkText}
-          </a>
-          <a 
-            href={project.codeLink} 
-            target="_blank" 
-            rel="noopener noreferrer" 
-            className="text-gray-700 hover:text-dark font-medium transition flex items-center"
-          >
-            {project.codeIcon === "github" ? (
-              <Github className="mr-2 h-4 w-4" />
-            ) : (
-              <Frame className="mr-2 h-4 w-4" />
-            )}
-            {project.codeLinkText}
           </a>
         </div>
       </div>
@@ -96,29 +81,6 @@ const ProjectsSection = () => {
           <p className="text-lg text-gray-600 max-w-3xl mx-auto">
             A showcase of my recent work and personal projects that demonstrate my technical skills.
           </p>
-        </motion.div>
-        
-        {/* Project filter buttons */}
-        <motion.div 
-          className="flex flex-wrap justify-center gap-4 mb-10"
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5, delay: 0.1 }}
-        >
-          {categories.map((category) => (
-            <button
-              key={category}
-              onClick={() => setActiveCategory(category)}
-              className={`px-5 py-2 rounded-full transition ${
-                activeCategory === category
-                  ? "bg-primary text-white"
-                  : "bg-white text-dark hover:bg-gray-200"
-              }`}
-            >
-              {category}
-            </button>
-          ))}
         </motion.div>
         
         {/* Projects Grid */}

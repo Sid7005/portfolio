@@ -10,7 +10,7 @@ import { useEffect } from "react";
 
 const Home = () => {
   useEffect(() => {
-    document.title = "Manish Bhanushali - Software Engineer";
+    document.title = "Siddharajsinh Chauhan - Web Developer";
   }, []);
 
   return (

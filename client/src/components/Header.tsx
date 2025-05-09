@@ -3,6 +3,7 @@ import { Link } from "wouter";
 import { useMobile } from "@/hooks/use-mobile";
 import { useScrollToSection } from "@/hooks/useScrollToSection";
 import { Menu, X } from "lucide-react";
+import resume from "../../assets/doc/Sid-Resume.pdf"
 
 const navLinks = [
   { href: "#home", label: "Home" },
@@ -49,7 +50,7 @@ const Header = () => {
             scrollToSection("#home");
           }}
         >
-          MB<span className="text-accent">.</span>
+          SC<span className="text-accent">.</span>
         </a>
         
         {/* Desktop Navigation */}
@@ -87,7 +88,7 @@ const Header = () => {
         
         {/* Resume Button */}
         <a 
-          href="/resume.pdf" 
+          href={resume} 
           className="hidden md:block bg-primary hover:bg-secondary text-white px-4 py-2 rounded-md transition"
           target="_blank"
           rel="noopener noreferrer"
@@ -115,7 +116,7 @@ const Header = () => {
           ))}
           <li className="pt-2 mt-2 border-t">
             <a 
-              href="/resume.pdf" 
+              href={resume} 
               className="block bg-primary hover:bg-secondary text-white px-4 py-2 rounded-md text-center transition"
               target="_blank"
               rel="noopener noreferrer"

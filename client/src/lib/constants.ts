@@ -1,4 +1,5 @@
 import { Project } from "./types";
+import FITImage from '../../assets/images/fit.jpg'
 
 export const frontendSkills = [
   { name: "React.js", percentage: 90 },
@@ -25,149 +26,111 @@ export const devopsSkills = [
 ];
 
 export const additionalSkills = [
-  "TypeScript",
-  "GraphQL",
+  "ReactJS",
   "NextJS",
-  "Tailwind CSS",
-  "Firebase",
-  "Material UI",
-  "Agile/Scrum",
-  "Webpack",
-  "Figma",
-  "Python",
+  "JavaScript",
+  "TypeScript",
+  "ASP.NET Web Forms",
+  "ASP.NET Core",
+  "ASP.NET MVC",
+  "Python - FastAPI",
+  "NodeJS",
+  "MSSQL",
+  "PostgreSQL",
+  "Bootstrap CSS",
+  "HTML",
+  "CSS",
 ];
 
 export const experience = [
   {
-    position: "Senior Software Engineer",
-    company: "TechNova Solutions",
-    period: "2020 - Present",
+    position: "Web Developer",
+    company: "ZealousWeb Technologies PVT LTD.",
+    period: "Apr 2022 - Present",
     description: [
-      "Led the development of a React-based dashboard that improved client reporting efficiency by 40%",
-      "Architected and implemented RESTful APIs using Node.js and Express",
-      "Mentored junior developers and conducted code reviews to maintain high-quality standards",
-      "Implemented CI/CD pipelines that reduced deployment time by 60%"
+      "Developed and maintained full-stack web applications using React, TypeScript, and ASP.NET Core",
+      "Led the integration of third-party services including Stripe, Authorize.net, and ID.me for secure payments and user verification",
+      "Built dynamic address forms using Google Maps Places Autocomplete and optimized autofill logic for better UX and accuracy",
+      "Improved frontend architecture by modularizing form components and leveraging Redux for predictable state management",
+      "Enhanced performance by optimizing bundle size and implementing lazy loading, resulting in 30% faster load times",
+      "Collaborated closely with designers and backend teams in Agile sprints to deliver responsive, accessible, and scalable applications",
     ],
-    skills: ["React", "Node.js", "AWS", "MongoDB"]
+    skills: [
+      "ASP.NET Core",
+      "JavaScript",
+      "ReactJS",
+      "Redux",
+      "TypeScript",
+      "Next.js",
+      "Python - FastAPI",
+      "NodeJS",
+    ],
   },
   {
-    position: "Software Developer",
-    company: "DataViz Inc.",
-    period: "2018 - 2020",
+    position: "Trainee",
+    company: "Aark Inosoft",
+    period: "Nov 2021 - Mar 2022",
     description: [
-      "Developed and maintained multiple web applications using JavaScript and React",
-      "Collaborated with UI/UX designers to implement responsive and intuitive user interfaces",
-      "Optimized application performance, resulting in 30% faster load times",
-      "Participated in Agile development cycles and sprint planning"
+      "Developed responsive websites for various clients using HTML5, CSS3, and JavaScript",
+      "Implemented interactive features with JavaScript and jQuery to enhance user engagement",
+      "Supported senior developers with backend tasks in ASP.NET Web Forms and MVC, gaining hands-on experience with C# and SQL Server",
+      "Participated in QA testing and bug fixing to ensure cross-browser compatibility and mobile responsiveness",
     ],
-    skills: ["JavaScript", "React", "Redux", "CSS3"]
+    skills: [
+      "HTML5",
+      "CSS3",
+      "JavaScript",
+      "jQuery",
+      "ASP.NET Web Forms",
+      "ASP.NET MVC",
+    ],
   },
-  {
-    position: "Junior Web Developer",
-    company: "WebCraft Studios",
-    period: "2016 - 2018",
-    description: [
-      "Built responsive websites for diverse clients using HTML, CSS, and JavaScript",
-      "Implemented frontend features using jQuery and vanilla JavaScript",
-      "Created and maintained WordPress-based solutions",
-      "Assisted senior developers in larger projects and learned best practices"
-    ],
-    skills: ["HTML5", "CSS3", "JavaScript", "WordPress"]
-  }
 ];
 
 export const education = [
   {
-    degree: "Master of Computer Science",
-    institution: "Stanford University",
-    period: "2014 - 2016",
-    gpa: "3.8/4.0"
+    degree: "Bachelor of Engineering in Computer Engineering",
+    institution: "D.A. Degree Engineering & Technology",
+    period: "2020 - 2023",
+    cgpa: "8.3/10.0",
   },
   {
-    degree: "Bachelor of Engineering",
-    institution: "University of California, Berkeley",
-    period: "2010 - 2014",
-    gpa: "3.7/4.0"
-  }
+    degree: "Diploma in Computer Engineering",
+    institution: "D.A. Diploma Engineering & Technology",
+    period: "2016 - 2019",
+    cgpa: "7.3/10.0",
+  },
 ];
 
 export const projects: Project[] = [
   {
     id: 1,
-    title: "E-commerce Dashboard",
+    title: "MightyMeals",
     category: "Web App",
-    description: "A comprehensive dashboard for e-commerce businesses with real-time analytics, inventory management, and order processing capabilities.",
-    image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80",
-    technologies: ["React", "Node.js", "MongoDB", "Chart.js"],
-    demoLink: "https://example.com/demo",
+    description: "MightyMeals is a meal delivery platform offering fresh, chef-prepared meals with a seamless user experience. I worked on the React.js frontend, implementing a responsive and intuitive UI. My contributions included integrating secure payment gateways, optimizing the checkout flow, and developing the order creation functionality.",
+    image: "https://eatmightymeals.com/wp-content/uploads/2019/08/DSC6681.jpg",
+    technologies: ["ReactJS", "WordPress", "Python - FastAPI"],
+    demoLink: "https://mightymeals.com/",
     demoLinkText: "Live Demo",
-    codeLink: "https://github.com",
-    codeLinkText: "Code",
-    codeIcon: "github"
   },
   {
     id: 2,
-    title: "Travel Companion App",
-    category: "Mobile",
-    description: "A mobile application that helps travelers plan itineraries, discover local attractions, and share experiences with friends.",
-    image: "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80",
-    technologies: ["React Native", "Firebase", "Google Maps API"],
-    demoLink: "https://example.com/app-store",
-    demoLinkText: "App Store",
-    codeLink: "https://github.com",
-    codeLinkText: "Code",
-    codeIcon: "github"
+    title: "By Best",
+    category: "Web App",
+    description: "By Best is an eCommerce platform for fashion and accessories, offering clothing for men, women, and kids, along with jewelry, sunglasses, and more. I worked on the React.js frontend, building responsive product pages, optimizing filtering and search functionality, and integrating dynamic cart and checkout experiences.",
+    image: "https://bybest.shop/assets/img/bybest-logo.png",
+    technologies: ["ReactJS", "Laravel"],
+    demoLink: "https://bybest.shop/",
+    demoLinkText: "Live Demo",
   },
   {
     id: 3,
-    title: "Weather API Service",
-    category: "API",
-    description: "A RESTful API service that provides accurate weather forecasts and historical weather data for locations worldwide.",
-    image: "https://images.unsplash.com/photo-1534972195531-d756b9bfa9f2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80",
-    technologies: ["Node.js", "Express", "MongoDB", "Docker"],
-    demoLink: "https://example.com/docs",
-    demoLinkText: "Documentation",
-    codeLink: "https://github.com",
-    codeLinkText: "Code",
-    codeIcon: "github"
-  },
-  {
-    id: 4,
-    title: "Task Management System",
+    title: "Fields In Trust",
     category: "Web App",
-    description: "A collaborative task management application that helps teams organize projects, assign tasks, and track progress.",
-    image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80",
-    technologies: ["React", "Redux", "Node.js", "PostgreSQL"],
-    demoLink: "https://example.com/demo",
+    description: "Fields In Trust is a UK-based charity dedicated to protecting parks, playgrounds, and green spaces for future generations. I contributed to the development of their ASP.NET MVC website, focusing on implementing dynamic content management, building secure and maintainable web forms, and integrating location-based features to help users find protected fields and sites across the UK.",
+    image: FITImage,
+    technologies: ["ASP.NET MVC", "C#", "Razor Pages", "Entity Framework"],
+    demoLink: "https://fieldsintrust.org/",
     demoLinkText: "Live Demo",
-    codeLink: "https://github.com",
-    codeLinkText: "Code",
-    codeIcon: "github"
   },
-  {
-    id: 5,
-    title: "Fitness Tracking App UI",
-    category: "UI/UX",
-    description: "A modern and intuitive user interface design for a fitness tracking application focused on user engagement and accessibility.",
-    image: "https://images.unsplash.com/photo-1607252650355-f7fd0460ccdb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80",
-    technologies: ["Figma", "Adobe XD", "Prototyping"],
-    demoLink: "https://example.com/case-study",
-    demoLinkText: "Case Study",
-    codeLink: "https://behance.net",
-    codeLinkText: "Behance",
-    codeIcon: "behance"
-  },
-  {
-    id: 6,
-    title: "AI Chatbot",
-    category: "Web App",
-    description: "An intelligent chatbot that leverages natural language processing to provide customer support and answer user queries.",
-    image: "https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1074&q=80",
-    technologies: ["Python", "TensorFlow", "React", "Flask"],
-    demoLink: "https://example.com/demo",
-    demoLinkText: "Live Demo",
-    codeLink: "https://github.com",
-    codeLinkText: "Code",
-    codeIcon: "github"
-  }
 ];

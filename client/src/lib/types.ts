@@ -9,7 +9,4 @@ export interface Project {
   technologies: string[];
   demoLink: string;
   demoLinkText: string;
-  codeLink: string;
-  codeLinkText: string;
-  codeIcon: "github" | "behance";
 }
