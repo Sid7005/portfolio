@@ -53,7 +53,7 @@ const Footer = () => {
             ))}
           </div>
           
-          {/* Download CV button */}
+          {/*  Download CV button */}
           <div>
             <a 
               href={resume} 
