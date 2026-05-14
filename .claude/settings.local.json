@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm install *)",
+      "PowerShell(Get-ChildItem -Path \"d:\\\\Data\\\\ResumePortfolio\" -Recurse -Directory | Select-Object -ExpandProperty FullName | ForEach-Object { $_ } | Select-Object -First 50)"
+    ]
+  }
+}

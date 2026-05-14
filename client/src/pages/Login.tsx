@@ -108,13 +108,6 @@ const Login = () => {
               {loading ? "Authenticating..." : "Access Dashboard"}
             </button>
           </form>
-
-          <p className="text-center text-xs text-muted-foreground mt-6">
-            Default password:{" "}
-            <code className="font-mono text-primary bg-primary/10 px-1.5 py-0.5 rounded">admin123</code>
-            <br />
-            <span className="text-xs opacity-60">Set <code className="font-mono">ADMIN_PASSWORD</code> env var to change.</span>
-          </p>
         </div>
 
         <p className="text-center mt-4">

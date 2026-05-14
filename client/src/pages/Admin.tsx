@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import { useToast } from "@/hooks/use-toast";
 import {
   LayoutDashboard, User, Briefcase, Code2, FolderOpen,
-  Mail, LogOut, Plus, Trash2, Save, Loader2, ChevronDown, ChevronUp, Upload, ImageIcon,
+  Mail, LogOut, Plus, Trash2, Save, Loader2, ChevronDown, ChevronUp, Upload, ImageIcon, FileText,
 } from "lucide-react";
 
 type ContentData = {
@@ -217,6 +217,65 @@ const ImageUpload = ({ currentUrl, onUploaded, label = "Image" }: {
   );
 };
 
+/* ── Resume Upload ──────────────────────────────────────────────── */
+const ResumeUpload = () => {
+  const fileRef = useRef<HTMLInputElement>(null);
+  const [uploading, setUploading] = useState(false);
+  const [replaced, setReplaced] = useState(false);
+  const { toast } = useToast();
+
+  const handleFile = async (file: File) => {
+    setUploading(true);
+    setReplaced(false);
+    try {
+      const form = new FormData();
+      form.append("resume", file);
+      const res = await fetch("/api/admin/upload-resume", { method: "POST", credentials: "include", body: form });
+      if (!res.ok) throw new Error((await res.json()).message ?? "Upload failed");
+      setReplaced(true);
+      toast({ title: "Resume replaced!", description: "The new PDF is now live at /resume." });
+    } catch (e: any) {
+      toast({ title: "Upload failed", description: e.message, variant: "destructive" });
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  return (
+    <div className="space-y-3">
+      <label className="block text-sm text-muted-foreground">Resume (PDF)</label>
+      <div className="flex items-center gap-3 flex-wrap">
+        <button
+          type="button"
+          onClick={() => fileRef.current?.click()}
+          disabled={uploading}
+          className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-medium gradient-bg text-white hover:opacity-90 transition disabled:opacity-50"
+        >
+          {uploading ? <Loader2 className="w-3 h-3 animate-spin" /> : <Upload className="w-3 h-3" />}
+          {uploading ? "Uploading..." : "Upload New Resume"}
+        </button>
+        <a
+          href="/resume"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-medium glass border border-white/10 text-muted-foreground hover:text-white hover:border-primary/30 transition"
+        >
+          <FileText className="w-3 h-3" /> View Current
+        </a>
+        {replaced && <span className="text-xs text-emerald-400 font-mono">✓ Replaced successfully</span>}
+      </div>
+      <p className="text-xs text-muted-foreground/60">PDF only · max 10 MB · replaces existing resume immediately</p>
+      <input
+        ref={fileRef}
+        type="file"
+        accept="application/pdf,.pdf"
+        className="hidden"
+        onChange={(e) => e.target.files?.[0] && handleFile(e.target.files[0])}
+      />
+    </div>
+  );
+};
+
 /* ── Sub-panel: Hero ─────────────────────────────────────────────── */
 const HeroPanel = ({ data, onSave }: { data: any; onSave: (d: any) => void }) => {
   const [form, setForm] = useState({ ...data });
@@ -286,6 +345,10 @@ const HeroPanel = ({ data, onSave }: { data: any; onSave: (d: any) => void }) =>
           currentUrl={form.logoImage ?? ""}
           onUploaded={(url) => setForm({ ...form, logoImage: url })}
         />
+      </div>
+      <div className="pt-2 border-t border-white/5 space-y-4">
+        <p className="text-xs font-mono text-muted-foreground">// resume</p>
+        <ResumeUpload />
       </div>
       <SaveBtn saving={saving} onClick={save} />
     </div>

@@ -3,7 +3,6 @@ import { useScrollToSection } from "@/hooks/useScrollToSection";
 import { Download, ArrowRight, Github, Linkedin, Mail } from "lucide-react";
 import { useEffect, useState } from "react";
 import heroPhoto from "../../assets/images/ImportedPhoto.760428188.70688.jpeg";
-import resume from "../../assets/doc/Sid-Resume.pdf";
 
 const DEFAULT_ROLES = [
   "React & Next.js Expert",
@@ -163,7 +162,7 @@ const HeroSection = ({ content }: Props) => {
                 View My Work <ArrowRight className="w-4 h-4" />
               </button>
               <a
-                href={resume}
+                href="/resume"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center gap-2 px-7 py-3 rounded-full text-white font-semibold text-sm transition-all duration-300 hover:-translate-y-0.5"

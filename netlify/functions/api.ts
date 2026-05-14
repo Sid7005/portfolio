@@ -326,6 +326,24 @@ export default async function handler(req: Request) {
       return json(uploaded);
     }
 
+    // ── Resume upload (stored in Netlify Blobs under fixed key "resume") ──────
+
+    if (pathname === "/api/admin/upload-resume" && method === "POST") {
+      const formData = await req.formData();
+      const file = formData.get("resume") as File | null;
+      if (!file) return json({ message: "No file uploaded." }, 400);
+      if (file.type !== "application/pdf" && !file.name.toLowerCase().endsWith(".pdf")) {
+        return json({ message: "Only PDF files are allowed." }, 400);
+      }
+      if (file.size > 10 * 1024 * 1024) return json({ message: "File too large (max 10 MB)." }, 400);
+
+      const buffer = await file.arrayBuffer();
+      const store = getStore("portfolio-uploads");
+      await store.set("resume", buffer, { metadata: { contentType: "application/pdf" } });
+
+      return json({ url: "/resume", message: "Resume uploaded." });
+    }
+
     return json({ message: "Not found." }, 404);
   } catch (e: unknown) {
     console.error("[API Error]", e);

@@ -2,7 +2,7 @@ import type { Express, Request, Response, NextFunction } from "express";
 import { createServer, type Server } from "http";
 import { createHash, randomBytes } from "crypto";
 import { mkdirSync, existsSync, readdirSync } from "fs";
-import { join, dirname } from "path";
+import { join, dirname, resolve } from "path";
 import { fileURLToPath } from "url";
 import multer from "multer";
 import { content } from "./content";
@@ -27,6 +27,26 @@ const upload = multer({
     else cb(new Error("Only image files are allowed."));
   },
 });
+
+const resumeStorage = multer.diskStorage({
+  destination: (_req, _file, cb) => cb(null, UPLOADS_DIR),
+  filename: (_req, _file, cb) => cb(null, "resume.pdf"),
+});
+
+const resumeUpload = multer({
+  storage: resumeStorage,
+  limits: { fileSize: 10 * 1024 * 1024 },
+  fileFilter: (_req, file, cb) => {
+    if (file.mimetype === "application/pdf" || file.originalname.toLowerCase().endsWith(".pdf")) {
+      cb(null, true);
+    } else {
+      cb(new Error("Only PDF files are allowed."));
+    }
+  },
+});
+
+const RESUME_PATH = join(UPLOADS_DIR, "resume.pdf");
+const STATIC_RESUME = resolve(__dirname_r, "../client/assets/doc/Sid-Resume.pdf");
 
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD;
 if (!ADMIN_PASSWORD) throw new Error("ADMIN_PASSWORD env var is required");
@@ -135,6 +155,21 @@ export async function registerRoutes(app: Express): Promise<Server> {
       : [];
 
     res.json([...uploaded, ...assets]);
+  });
+
+  /* ─── Resume upload + serve ────────────────────────────────────── */
+
+  app.post("/api/admin/upload-resume", requireAdmin, resumeUpload.single("resume"), (req: Request, res: Response) => {
+    if (!req.file) return res.status(400).json({ message: "No file uploaded." });
+    res.json({ url: "/resume", message: "Resume uploaded." });
+  });
+
+  app.get("/resume", (_req: Request, res: Response) => {
+    const path = existsSync(RESUME_PATH) ? RESUME_PATH : existsSync(STATIC_RESUME) ? STATIC_RESUME : null;
+    if (!path) return res.status(404).json({ message: "No resume available." });
+    res.setHeader("Content-Type", "application/pdf");
+    res.setHeader("Content-Disposition", 'inline; filename="resume.pdf"');
+    res.sendFile(path);
   });
 
   /* ─── Admin content updates ──────────────────────────────────── */
