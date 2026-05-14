@@ -1,0 +1,14 @@
+[build]
+  command = "npm run build:netlify"
+  publish = "dist/public"
+  functions = "netlify/functions"
+
+[functions]
+  node_bundler = "esbuild"
+
+# Netlify Functions v2 with config.path handle /api/* and /uploads/* automatically.
+# This catch-all only applies to client-side routes (SPA fallback).
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
