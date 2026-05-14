@@ -2,19 +2,19 @@ import { Project } from "./types";
 import FITImage from '../../assets/images/fit.jpg'
 
 export const frontendSkills = [
-  { name: "React.js", percentage: 90 },
-  { name: "JavaScript/ES6+", percentage: 95 },
+  { name: "React.js / Next.js", percentage: 92 },
+  { name: "TypeScript / JavaScript", percentage: 94 },
   { name: "HTML5/CSS3", percentage: 90 },
   { name: "Redux", percentage: 85 },
-  { name: "Responsive Design", percentage: 90 },
+  { name: "Responsive Design", percentage: 92 },
 ];
 
 export const backendSkills = [
   { name: "Node.js", percentage: 88 },
-  { name: "Express.js", percentage: 85 },
+  { name: "Express.js", percentage: 86 },
   { name: "REST API Design", percentage: 90 },
-  { name: "MongoDB", percentage: 80 },
-  { name: "PostgreSQL", percentage: 75 },
+  { name: "PostgreSQL", percentage: 80 },
+  { name: "MongoDB", percentage: 78 },
 ];
 
 export const devopsSkills = [
@@ -28,18 +28,18 @@ export const devopsSkills = [
 export const additionalSkills = [
   "ReactJS",
   "NextJS",
-  "JavaScript",
   "TypeScript",
-  "ASP.NET Web Forms",
-  "ASP.NET Core",
-  "ASP.NET MVC",
-  "Python - FastAPI",
+  "JavaScript",
   "NodeJS",
-  "MSSQL",
+  "Python - FastAPI",
   "PostgreSQL",
+  "MongoDB",
   "Bootstrap CSS",
   "HTML",
   "CSS",
+  "ASP.NET Core",
+  "ASP.NET MVC",
+  "MSSQL",
 ];
 
 export const experience = [
@@ -56,14 +56,14 @@ export const experience = [
       "Collaborated closely with designers and backend teams in Agile sprints to deliver responsive, accessible, and scalable applications",
     ],
     skills: [
-      "ASP.NET Core",
-      "JavaScript",
       "ReactJS",
-      "Redux",
       "TypeScript",
       "Next.js",
-      "Python - FastAPI",
       "NodeJS",
+      "Redux",
+      "Python - FastAPI",
+      "ASP.NET Core",
+      "JavaScript",
     ],
   },
   {

@@ -3,12 +3,27 @@ import { motion } from "framer-motion";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import emailjs from "@emailjs/browser";
 import { useToast } from "@/hooks/use-toast";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { MapPin, Mail, Phone, Send, Linkedin, Github } from "lucide-react";
+
+const EMAILJS_SERVICE_ID  = import.meta.env.VITE_EMAILJS_SERVICE_ID  as string;
+const EMAILJS_TEMPLATE_ID = import.meta.env.VITE_EMAILJS_TEMPLATE_ID as string;
+const EMAILJS_PUBLIC_KEY  = import.meta.env.VITE_EMAILJS_PUBLIC_KEY  as string;
+const CALLMEBOT_PHONE     = import.meta.env.VITE_CALLMEBOT_PHONE     as string;
+const CALLMEBOT_API_KEY   = import.meta.env.VITE_CALLMEBOT_API_KEY   as string;
+
+async function sendWhatsApp(name: string, senderEmail: string, subject: string, message: string) {
+  if (!CALLMEBOT_PHONE || !CALLMEBOT_API_KEY) return;
+  const text = encodeURIComponent(
+    `📬 Portfolio Contact\n👤 ${name}\n📧 ${senderEmail}\n📌 ${subject}\n💬 ${message}`
+  );
+  await fetch(`https://api.callmebot.com/whatsapp.php?phone=${CALLMEBOT_PHONE}&text=${text}&apikey=${CALLMEBOT_API_KEY}`);
+}
 
 const formSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters."),
@@ -50,12 +65,21 @@ const ContactSection = ({ content }: Props) => {
   const onSubmit = async (data: FormData) => {
     setIsSubmitting(true);
     try {
-      const res = await fetch("/api/contact", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
-      });
-      if (!res.ok) throw new Error();
+      await emailjs.send(
+        EMAILJS_SERVICE_ID,
+        EMAILJS_TEMPLATE_ID,
+        {
+          from_name:    data.name,
+          from_email:   data.email,
+          subject:      data.subject,
+          message:      data.message,
+          to_name:      "Siddharajsinh",
+        },
+        EMAILJS_PUBLIC_KEY
+      );
+
+      sendWhatsApp(data.name, data.email, data.subject, data.message).catch(() => {});
+
       toast({ title: "Message sent!", description: "I'll get back to you soon." });
       form.reset();
     } catch {
@@ -67,14 +91,13 @@ const ContactSection = ({ content }: Props) => {
 
   return (
     <section id="contact" className="py-24 md:py-32 relative overflow-hidden">
-      <div className="absolute top-0 left-0 w-full h-1 opacity-60"
-        style={{ background: "linear-gradient(90deg, transparent, #0ea5e9, #22d3ee, transparent)" }} />
+      <div className="absolute top-0 left-0 w-full h-px section-accent-line" />
 
       <div className="container mx-auto px-6">
         <motion.div className="text-center mb-16"
           initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }} transition={{ duration: 0.5 }}>
-          <p className="font-mono text-sm text-primary mb-3">// let's connect</p>
+          <p className="font-mono text-sm mb-3" style={{ color: "#a78bfa" }}>// let's connect</p>
           <h2 className="section-heading gradient-text inline-block">Get In Touch</h2>
           <p className="section-subheading mt-4">Have a project in mind or want to collaborate? I'd love to hear from you.</p>
         </motion.div>

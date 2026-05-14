@@ -4,12 +4,12 @@
     "name": "Siddharajsinh Chauhan",
     "shortName": "Siddharajsinh",
     "roles": [
-      "Full-Stack Web Developer",
       "React & Next.js Expert",
-      "ASP.NET Core Builder",
-      "UI/UX Enthusiast"
+      "Full-Stack Web Developer",
+      "Node.js Engineer",
+      "TypeScript Enthusiast"
     ],
-    "bio": "4+ years crafting scalable, high-performance web applications with React, TypeScript, and ASP.NET Core. I turn complex problems into clean, elegant solutions.",
+    "bio": "4+ years crafting scalable, high-performance web applications with React, TypeScript, and Node.js. I turn complex problems into clean, elegant solutions.",
     "stats": [
       {
         "value": "4+",
@@ -32,9 +32,9 @@
   },
   "about": {
     "paragraphs": [
-      "I'm a dedicated Full-Stack Web Developer with 4+ years of experience building and scaling web applications. My passion lies in crafting intuitive, efficient, and beautiful solutions that solve real-world problems.",
-      "With a strong foundation spanning React, TypeScript, ASP.NET Core, and Node.js, I bring a holistic approach to development — from designing pixel-perfect UIs to architecting robust backend services.",
-      "Outside of coding, I enjoy hiking, playing cricket, reading tech blogs, and contributing to open-source. I thrive in collaborative environments and I'm always excited to take on new challenges."
+      "I'm a Full-Stack Web Developer with 4+ years of experience building and scaling production web applications. My passion lies in crafting intuitive, performant, and beautiful solutions — from pixel-perfect React UIs to resilient Node.js backends.",
+      "React and TypeScript are my primary tools of choice. I've spent the last few years building complex SPAs, optimizing performance, integrating payment gateways like Stripe, and shipping features that real users rely on every day.",
+      "Outside of coding, I enjoy hiking, playing cricket, reading tech blogs, and contributing to open-source. I thrive in collaborative Agile environments and I'm always excited to take on new challenges."
     ]
   },
   "contact": {
@@ -58,12 +58,11 @@
       "Framer Motion"
     ],
     "backend": [
-      "ASP.NET Core",
-      "ASP.NET MVC",
       "Node.js",
       "Express.js",
-      "Python (FastAPI)",
       "REST APIs",
+      "Python (FastAPI)",
+      "ASP.NET Core",
       "Entity Framework",
       "C#"
     ],
@@ -71,8 +70,6 @@
       "PostgreSQL",
       "MSSQL",
       "MongoDB",
-      "Redis",
-      "Drizzle ORM",
       "Entity Framework",
       "SQL Server"
     ],
@@ -90,39 +87,39 @@
     "additional": [
       "ReactJS",
       "NextJS",
-      "JavaScript",
       "TypeScript",
-      "ASP.NET Web Forms",
-      "ASP.NET Core",
-      "ASP.NET MVC",
-      "Python - FastAPI",
+      "JavaScript",
       "NodeJS",
-      "MSSQL",
+      "Python - FastAPI",
       "PostgreSQL",
+      "MongoDB",
       "Bootstrap CSS",
       "HTML",
-      "CSS"
+      "CSS",
+      "ASP.NET Core",
+      "ASP.NET MVC",
+      "MSSQL"
     ],
     "proficiency": [
       {
-        "name": "React.js / Next.js",
-        "level": 90
+        "name": "TypeScript / JavaScript",
+        "level": 94
       },
       {
-        "name": "TypeScript / JavaScript",
+        "name": "React.js / Next.js",
         "level": 92
       },
       {
-        "name": "ASP.NET Core",
-        "level": 85
-      },
-      {
         "name": "Node.js / Express",
-        "level": 82
+        "level": 88
       },
       {
         "name": "Git & DevOps",
         "level": 88
+      },
+      {
+        "name": "ASP.NET Core",
+        "level": 65
       }
     ]
   },
@@ -133,7 +130,7 @@
       "company": "ZealousWeb Technologies PVT LTD.",
       "period": "Apr 2022 - Present",
       "description": [
-        "Developed and maintained full-stack web applications using React, TypeScript, and ASP.NET Core",
+        "Developed and maintained full-stack web applications using React, TypeScript, and Node.js",
         "Led the integration of third-party services including Stripe, Authorize.net, and ID.me for secure payments and user verification",
         "Built dynamic address forms using Google Maps Places Autocomplete and optimized autofill logic for better UX and accuracy",
         "Improved frontend architecture by modularizing form components and leveraging Redux for predictable state management",
@@ -141,14 +138,14 @@
         "Collaborated closely with designers and backend teams in Agile sprints to deliver responsive, accessible, and scalable applications"
       ],
       "skills": [
-        "ASP.NET Core",
-        "JavaScript",
         "ReactJS",
-        "Redux",
         "TypeScript",
         "Next.js",
+        "NodeJS",
+        "Redux",
         "Python - FastAPI",
-        "NodeJS"
+        "ASP.NET Core",
+        "JavaScript"
       ]
     },
     {

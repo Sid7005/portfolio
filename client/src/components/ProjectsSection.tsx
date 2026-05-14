@@ -16,7 +16,7 @@ const ProjectCard = ({ project, index }: { project: ProjectItem; index: number }
     initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }}
     exit={{ opacity: 0, scale: 0.95 }} transition={{ duration: 0.35, delay: index * 0.07 }}
     className="glass-card rounded-2xl overflow-hidden group flex flex-col">
-    <div className="relative h-48 overflow-hidden bg-muted/50">
+    <div className="relative h-48 overflow-hidden bg-white">
       <img src={project.image} alt={project.title}
         className={`w-full h-full ${project.title === "By Best" ? "object-contain p-4" : "object-cover"} group-hover:scale-105 transition-transform duration-500`} />
       <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
@@ -62,14 +62,13 @@ const ProjectsSection = ({ content }: Props) => {
 
   return (
     <section id="projects" className="py-24 md:py-32 relative overflow-hidden">
-      <div className="absolute top-0 left-0 w-full h-1 opacity-60"
-        style={{ background: "linear-gradient(90deg, transparent, #22d3ee, #0ea5e9, transparent)" }} />
+      <div className="absolute top-0 left-0 w-full h-px section-accent-line" />
 
       <div className="container mx-auto px-6">
         <motion.div className="text-center mb-14"
           initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }} transition={{ duration: 0.5 }}>
-          <p className="font-mono text-sm text-primary mb-3">// what I've built</p>
+          <p className="font-mono text-sm mb-3" style={{ color: "#a78bfa" }}>// what I've built</p>
           <h2 className="section-heading gradient-text inline-block">Projects</h2>
           <p className="section-subheading mt-4">A showcase of real-world work that demonstrates my technical range.</p>
         </motion.div>

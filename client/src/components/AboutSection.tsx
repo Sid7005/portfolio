@@ -3,16 +3,16 @@ import { MapPin, Mail, Phone, Code2, Layers, Cloud, Cpu } from "lucide-react";
 import { FaLinkedinIn, FaGithub } from "react-icons/fa";
 
 const DEFAULT_PARAGRAPHS = [
-  "I'm a dedicated Full-Stack Web Developer with 3+ years of experience building and scaling web applications. My passion lies in crafting intuitive, efficient, and beautiful solutions that solve real-world problems.",
-  "With a strong foundation spanning React, TypeScript, ASP.NET Core, and Node.js, I bring a holistic approach to development — from designing pixel-perfect UIs to architecting robust backend services.",
-  "Outside of coding, I enjoy hiking, playing cricket, reading tech blogs, and contributing to open-source. I thrive in collaborative environments and I'm always excited to take on new challenges.",
+  "I'm a Full-Stack Web Developer with 4+ years of experience building and scaling production web applications. My passion lies in crafting intuitive, performant, and beautiful solutions — from pixel-perfect React UIs to resilient Node.js backends.",
+  "React and TypeScript are my primary tools of choice. I've spent the last few years building complex SPAs, optimizing performance, integrating payment gateways like Stripe, and shipping features that real users rely on every day.",
+  "Outside of coding, I enjoy hiking, playing cricket, reading tech blogs, and contributing to open-source. I thrive in collaborative Agile environments and I'm always excited to take on new challenges.",
 ];
 
 const whatIDo = [
-  { icon: Code2, title: "Frontend Dev", desc: "React, Next.js, TypeScript — pixel-perfect, accessible UIs" },
-  { icon: Layers, title: "Backend Dev", desc: "ASP.NET Core, Node.js, REST APIs that scale" },
-  { icon: Cloud, title: "Cloud & DevOps", desc: "AWS, Docker, CI/CD pipelines, deployment automation" },
-  { icon: Cpu, title: "Performance", desc: "Bundle optimization, lazy loading, 30% faster load times" },
+  { icon: Code2, title: "React / Next.js", desc: "Pixel-perfect, accessible UIs with TypeScript, Redux, and Framer Motion" },
+  { icon: Layers, title: "Node.js / APIs", desc: "Express, REST APIs, PostgreSQL — scalable backends built for production" },
+  { icon: Cloud, title: "Cloud & DevOps", desc: "AWS, Docker, CI/CD pipelines, Vite, deployment automation" },
+  { icon: Cpu, title: "Performance", desc: "Bundle optimization, lazy loading, 30% faster load times on real products" },
 ];
 
 const fadeUp = {
@@ -44,14 +44,13 @@ const AboutSection = ({ content }: Props) => {
 
   return (
     <section id="about" className="py-24 md:py-32 relative overflow-hidden">
-      <div className="absolute top-0 left-0 w-full h-1 opacity-60"
-        style={{ background: "linear-gradient(90deg, transparent, #0ea5e9, #22d3ee, transparent)" }} />
+      <div className="absolute top-0 left-0 w-full h-px section-accent-line" />
 
       <div className="container mx-auto px-6">
         <motion.div className="text-center mb-16"
           initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }} transition={{ duration: 0.5 }}>
-          <p className="font-mono text-sm text-primary mb-3">// who I am</p>
+          <p className="font-mono text-sm mb-3" style={{ color: "#a78bfa" }}>// who I am</p>
           <h2 className="section-heading gradient-text inline-block">About Me</h2>
           <p className="section-subheading mt-4">A passionate developer who loves building things that live on the internet.</p>
         </motion.div>
@@ -71,7 +70,12 @@ const AboutSection = ({ content }: Props) => {
               viewport={{ once: true }} transition={{ duration: 0.5, delay: 0.3 }}>
               {infoItems.map(({ icon: Icon, label, value }) => (
                 <div key={label} className="flex items-center gap-3 text-sm">
-                  <div className="w-8 h-8 rounded-lg glass border border-white/8 flex items-center justify-center text-primary flex-shrink-0">
+                  <div className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0"
+                    style={{
+                      background: "rgba(139,92,246,0.1)",
+                      border: "1px solid rgba(139,92,246,0.2)",
+                      color: "#a78bfa",
+                    }}>
                     <Icon className="w-3.5 h-3.5" />
                   </div>
                   <span className="text-muted-foreground">{label}:</span>
@@ -83,11 +87,23 @@ const AboutSection = ({ content }: Props) => {
             <motion.div className="flex gap-3 pt-2" initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }} viewport={{ once: true }} transition={{ delay: 0.4 }}>
               <a href={linkedinUrl} target="_blank" rel="noopener noreferrer"
-                className="flex items-center gap-2 px-4 py-2 rounded-full glass border border-white/10 text-sm text-muted-foreground hover:text-white hover:border-primary/30 transition-all">
+                className="flex items-center gap-2 px-4 py-2 rounded-full text-sm text-muted-foreground hover:text-white transition-all"
+                style={{
+                  background: "rgba(99,102,241,0.07)",
+                  border: "1px solid rgba(139,92,246,0.2)",
+                }}
+                onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.borderColor = "rgba(167,139,250,0.45)"; }}
+                onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.borderColor = "rgba(139,92,246,0.2)"; }}>
                 <FaLinkedinIn className="w-3.5 h-3.5" /> LinkedIn
               </a>
               <a href={githubUrl} target="_blank" rel="noopener noreferrer"
-                className="flex items-center gap-2 px-4 py-2 rounded-full glass border border-white/10 text-sm text-muted-foreground hover:text-white hover:border-primary/30 transition-all">
+                className="flex items-center gap-2 px-4 py-2 rounded-full text-sm text-muted-foreground hover:text-white transition-all"
+                style={{
+                  background: "rgba(99,102,241,0.07)",
+                  border: "1px solid rgba(139,92,246,0.2)",
+                }}
+                onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.borderColor = "rgba(167,139,250,0.45)"; }}
+                onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.borderColor = "rgba(139,92,246,0.2)"; }}>
                 <FaGithub className="w-3.5 h-3.5" /> GitHub
               </a>
             </motion.div>
@@ -99,10 +115,11 @@ const AboutSection = ({ content }: Props) => {
               <motion.div key={title} custom={i} variants={fadeUp} initial="hidden"
                 whileInView="visible" viewport={{ once: true }}
                 className="glass-card rounded-2xl p-5 group cursor-default">
-                <div className="w-10 h-10 rounded-xl gradient-bg flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
+                <div className="w-10 h-10 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300"
+                  style={{ background: "linear-gradient(135deg, #0ea5e9, #6366f1)" }}>
                   <Icon className="w-5 h-5 text-white" />
                 </div>
-                <h4 className="font-semibold text-foreground mb-1.5">{title}</h4>
+                <h4 className="font-semibold text-foreground mb-1.5 font-space">{title}</h4>
                 <p className="text-sm text-muted-foreground leading-relaxed">{desc}</p>
               </motion.div>
             ))}

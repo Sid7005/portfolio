@@ -1,6 +1,7 @@
 import { useScrollToSection } from "@/hooks/useScrollToSection";
 import { Github, Linkedin, Mail, ArrowUp } from "lucide-react";
 import resume from "../../assets/doc/Sid-Resume.pdf";
+import sidAvatar from "../../assets/images/sid-avatar.png";
 
 const navLinks = [
   { href: "#home", label: "Home" },
@@ -26,7 +27,7 @@ const Footer = () => {
       {/* Top gradient divider */}
       <div
         className="absolute top-0 left-0 w-full h-px"
-        style={{ background: "linear-gradient(90deg, transparent, rgba(14,165,233,0.4), rgba(34,211,238,0.4), transparent)" }}
+        style={{ background: "linear-gradient(90deg, transparent, rgba(34,211,238,0.4), rgba(139,92,246,0.5), transparent)" }}
       />
 
       <div className="container mx-auto px-6 py-12">
@@ -35,11 +36,30 @@ const Footer = () => {
           <div>
             <a
               href="#home"
-              className="text-xl font-bold"
+              className="inline-flex items-center gap-2.5 group"
               onClick={(e) => { e.preventDefault(); scrollToSection("#home"); }}
             >
-              <span className="gradient-text font-mono">SC</span>
-              <span className="text-white/30">.</span>
+              {/* Avatar circle — matches Header logo */}
+              <div className="relative w-9 h-9 flex-shrink-0">
+                <div
+                  className="absolute -inset-0.5 rounded-full opacity-70 group-hover:opacity-100 transition-opacity"
+                  style={{ background: "linear-gradient(135deg, #0ea5e9, #8b5cf6)", padding: "1.5px" }}
+                >
+                  <div className="w-full h-full rounded-full" style={{ background: "#08101f" }} />
+                </div>
+                <div className="absolute inset-0 rounded-full overflow-hidden" style={{ background: "#000" }}>
+                  <img
+                    src={sidAvatar}
+                    alt="SID"
+                    className="w-full h-full object-contain scale-125 group-hover:scale-[1.35] transition-transform duration-300"
+                    style={{ mixBlendMode: "screen" }}
+                  />
+                </div>
+              </div>
+              <div className="flex flex-col leading-none">
+                <span className="font-black text-base font-mono gradient-text tracking-wide">SID.</span>
+                <span className="text-[9px] text-muted-foreground/60 font-mono tracking-widest uppercase">Full-Stack Dev</span>
+              </div>
             </a>
             <p className="text-sm text-muted-foreground mt-2 leading-relaxed max-w-xs">
               Crafting scalable, beautiful web experiences with modern technologies.

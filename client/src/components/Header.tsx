@@ -68,7 +68,7 @@ const Header = ({ content }: Props) => {
             {/* Glow ring */}
             <div
               className="absolute -inset-0.5 rounded-full opacity-70 group-hover:opacity-100 transition-opacity"
-              style={{ background: "linear-gradient(135deg, #0ea5e9, #22d3ee)", padding: "1.5px" }}
+              style={{ background: "linear-gradient(135deg, #0ea5e9, #8b5cf6)", padding: "1.5px" }}
             >
               <div className="w-full h-full rounded-full" style={{ background: "#060d1b" }} />
             </div>
@@ -105,7 +105,7 @@ const Header = ({ content }: Props) => {
                   <motion.span
                     layoutId="nav-pill"
                     className="absolute inset-0 rounded-full"
-                    style={{ background: "linear-gradient(135deg, rgba(14,165,233,0.2), rgba(34,211,238,0.2))", border: "1px solid rgba(34,211,238,0.3)" }}
+                    style={{ background: "linear-gradient(135deg, rgba(99,102,241,0.2), rgba(139,92,246,0.2))", border: "1px solid rgba(139,92,246,0.35)" }}
                     transition={{ type: "spring", stiffness: 350, damping: 30 }}
                   />
                 )}

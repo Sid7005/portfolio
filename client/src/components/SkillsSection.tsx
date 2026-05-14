@@ -4,17 +4,17 @@ import { additionalSkills as defaultAdditionalSkills } from "@/lib/constants";
 
 const DEFAULT_CATEGORIES = [
   { id: "frontend", label: "Frontend", skills: ["React.js", "Next.js", "TypeScript", "JavaScript (ES6+)", "HTML5", "CSS3", "Redux", "Tailwind CSS", "Bootstrap", "Framer Motion"] },
-  { id: "backend", label: "Backend", skills: ["ASP.NET Core", "ASP.NET MVC", "Node.js", "Express.js", "Python (FastAPI)", "REST APIs", "Entity Framework", "C#"] },
-  { id: "database", label: "Database", skills: ["PostgreSQL", "MSSQL", "MongoDB", "Redis", "Drizzle ORM", "SQL Server"] },
-  { id: "devops", label: "DevOps & Tools", skills: ["Git & GitHub", "Docker", "AWS", "CI/CD", "Linux", "Vite", "Webpack", "Jest", "Mocha"] },
+  { id: "backend", label: "Backend", skills: ["Node.js", "Express.js", "REST APIs", "Python (FastAPI)", "ASP.NET Core", "Entity Framework", "C#"] },
+  { id: "database", label: "Database", skills: ["PostgreSQL", "MongoDB", "MSSQL", "SQL Server"] },
+  { id: "devops", label: "DevOps & Tools", skills: ["Git & GitHub", "Docker", "AWS", "CI/CD", "Linux", "Vite", "Webpack", "Jest"] },
 ];
 
 const DEFAULT_PROFICIENCY = [
-  { name: "React.js / Next.js", level: 90 },
-  { name: "TypeScript / JavaScript", level: 92 },
-  { name: "ASP.NET Core", level: 85 },
-  { name: "Node.js / Express", level: 82 },
+  { name: "TypeScript / JavaScript", level: 94 },
+  { name: "React.js / Next.js", level: 92 },
+  { name: "Node.js / Express", level: 88 },
   { name: "Git & DevOps", level: 88 },
+  { name: "ASP.NET Core", level: 65 },
 ];
 
 type Props = { content?: any };
@@ -38,14 +38,13 @@ const SkillsSection = ({ content }: Props) => {
 
   return (
     <section id="skills" className="py-24 md:py-32 relative overflow-hidden">
-      <div className="absolute top-0 left-0 w-full h-1 opacity-60"
-        style={{ background: "linear-gradient(90deg, transparent, #22d3ee, #0ea5e9, transparent)" }} />
+      <div className="absolute top-0 left-0 w-full h-px section-accent-line" />
 
       <div className="container mx-auto px-6">
         <motion.div className="text-center mb-14"
           initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }} transition={{ duration: 0.5 }}>
-          <p className="font-mono text-sm text-primary mb-3">// what I work with</p>
+          <p className="font-mono text-sm mb-3" style={{ color: "#a78bfa" }}>// what I work with</p>
           <h2 className="section-heading gradient-text inline-block">Skills & Technologies</h2>
           <p className="section-subheading mt-4">Tools and technologies I've used to build real-world products.</p>
         </motion.div>

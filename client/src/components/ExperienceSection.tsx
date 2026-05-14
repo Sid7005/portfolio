@@ -75,14 +75,13 @@ const ExperienceSection = ({ content }: Props) => {
 
   return (
     <section id="experience" className="py-24 md:py-32 relative overflow-hidden">
-      <div className="absolute top-0 left-0 w-full h-1 opacity-60"
-        style={{ background: "linear-gradient(90deg, transparent, #0ea5e9, #22d3ee, transparent)" }} />
+      <div className="absolute top-0 left-0 w-full h-px section-accent-line" />
 
       <div className="container mx-auto px-6">
         <motion.div className="text-center mb-16"
           initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }} transition={{ duration: 0.5 }}>
-          <p className="font-mono text-sm text-primary mb-3">// my journey</p>
+          <p className="font-mono text-sm mb-3" style={{ color: "#a78bfa" }}>// my journey</p>
           <h2 className="section-heading gradient-text inline-block">Experience & Education</h2>
           <p className="section-subheading mt-4">My professional journey and academic background.</p>
         </motion.div>

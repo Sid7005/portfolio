@@ -28,7 +28,8 @@ const upload = multer({
   },
 });
 
-const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || "Hey@Sid2904";
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD;
+if (!ADMIN_PASSWORD) throw new Error("ADMIN_PASSWORD env var is required");
 
 // In-memory session store: token → expiry timestamp
 const sessions = new Map<string, number>();
