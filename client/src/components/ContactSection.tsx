@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { SectionBg } from "./SectionBg";
 import { motion } from "framer-motion";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -9,7 +10,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
-import { MapPin, Mail, Phone, Send, Linkedin, Github } from "lucide-react";
+import { MapPin, Mail, Phone, Send, Linkedin, Github, CheckCircle2 } from "lucide-react";
 
 const EMAILJS_SERVICE_ID  = import.meta.env.VITE_EMAILJS_SERVICE_ID  as string;
 const EMAILJS_TEMPLATE_ID = import.meta.env.VITE_EMAILJS_TEMPLATE_ID as string;
@@ -26,12 +27,11 @@ async function sendWhatsApp(name: string, senderEmail: string, subject: string, 
 }
 
 const formSchema = z.object({
-  name: z.string().min(2, "Name must be at least 2 characters."),
-  email: z.string().email("Please enter a valid email address."),
+  name:    z.string().min(2, "Name must be at least 2 characters."),
+  email:   z.string().email("Please enter a valid email address."),
   subject: z.string().min(5, "Subject must be at least 5 characters."),
   message: z.string().min(10, "Message must be at least 10 characters."),
 });
-
 type FormData = z.infer<typeof formSchema>;
 type Props = { content?: any };
 
@@ -40,21 +40,23 @@ const ContactSection = ({ content }: Props) => {
   const { toast } = useToast();
   const contactData = content?.contact;
 
-  const location = contactData?.location ?? "Ahmedabad, India";
-  const email = contactData?.email ?? "siddharajkc294000@gmail.com";
-  const phone = contactData?.phone ?? "+91 8320032657";
-  const linkedinUrl = contactData?.linkedinUrl ?? "https://www.linkedin.com/in/siddharajsinh-chauhan-410741199";
-  const githubUrl = contactData?.githubUrl ?? "https://github.com/";
+  const location          = contactData?.location          ?? "";
+  const email             = contactData?.email             ?? "";
+  const phone             = contactData?.phone             ?? "";
+  const linkedinUrl       = contactData?.linkedinUrl       ?? "#";
+  const githubUrl         = contactData?.githubUrl         ?? "#";
+  const availabilityTitle = contactData?.availabilityTitle ?? "Currently Available";
+  const availabilityText  = contactData?.availabilityText  ?? "Open to full-time roles, freelance projects, and consulting. Response within 24 hours.";
 
   const contactItems = [
-    { icon: MapPin, label: "Location", value: location },
-    { icon: Mail, label: "Email", value: email, href: `mailto:${email}` },
-    { icon: Phone, label: "Phone", value: phone, href: `tel:${phone.replace(/\s/g, "")}` },
+    { icon: MapPin, label: "Location", value: location,               href: undefined         },
+    { icon: Mail,   label: "Email",    value: email,                   href: `mailto:${email}` },
+    { icon: Phone,  label: "Phone",    value: phone,                   href: `tel:${phone.replace(/\s/g, "")}` },
   ];
 
   const socialLinks = [
     { icon: Linkedin, label: "LinkedIn", href: linkedinUrl },
-    { icon: Github, label: "GitHub", href: githubUrl },
+    { icon: Github,   label: "GitHub",   href: githubUrl   },
   ];
 
   const form = useForm<FormData>({
@@ -66,20 +68,11 @@ const ContactSection = ({ content }: Props) => {
     setIsSubmitting(true);
     try {
       await emailjs.send(
-        EMAILJS_SERVICE_ID,
-        EMAILJS_TEMPLATE_ID,
-        {
-          from_name:    data.name,
-          from_email:   data.email,
-          subject:      data.subject,
-          message:      data.message,
-          to_name:      "Siddharajsinh",
-        },
+        EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID,
+        { from_name: data.name, from_email: data.email, subject: data.subject, message: data.message, to_name: "Siddharajsinh" },
         EMAILJS_PUBLIC_KEY
       );
-
       sendWhatsApp(data.name, data.email, data.subject, data.message).catch(() => {});
-
       toast({ title: "Message sent!", description: "I'll get back to you soon." });
       form.reset();
     } catch {
@@ -90,68 +83,134 @@ const ContactSection = ({ content }: Props) => {
   };
 
   return (
-    <section id="contact" className="py-24 md:py-32 relative overflow-hidden">
+    <section
+      id="contact"
+      className="py-24 md:py-32 relative overflow-hidden"
+      style={{ background: "linear-gradient(135deg, #07071a 0%, #0d0520 40%, #06101e 100%)" }}
+    >
+      <SectionBg variant="contact" />
       <div className="absolute top-0 left-0 w-full h-px section-accent-line" />
 
+      {/* Aurora backgrounds */}
+      <div
+        className="absolute -top-20 left-0 w-[600px] h-[500px] pointer-events-none rounded-full"
+        style={{
+          background: "radial-gradient(ellipse, rgba(124,58,237,0.25) 0%, transparent 68%)",
+          filter: "blur(70px)",
+        }}
+      />
+      <div
+        className="absolute bottom-0 right-0 w-[500px] h-[400px] pointer-events-none rounded-full"
+        style={{
+          background: "radial-gradient(ellipse, rgba(37,99,235,0.2) 0%, transparent 68%)",
+          filter: "blur(80px)",
+        }}
+      />
+
       <div className="container mx-auto px-6">
-        <motion.div className="text-center mb-16"
-          initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }} transition={{ duration: 0.5 }}>
-          <p className="font-mono text-sm mb-3" style={{ color: "#a78bfa" }}>// let's connect</p>
-          <h2 className="section-heading gradient-text inline-block">Get In Touch</h2>
-          <p className="section-subheading mt-4">Have a project in mind or want to collaborate? I'd love to hear from you.</p>
+        {/* Header */}
+        <motion.div
+          className="text-center mb-16"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.55 }}
+        >
+          <p className="font-mono text-sm mb-3" style={{ color: "#a78bfa" }}>// let&apos;s connect</p>
+          <h2 className="section-heading gradient-text-animated inline-block">Get In Touch</h2>
+          <p className="section-subheading mt-4">
+            Have a project in mind or want to collaborate? I&apos;d love to hear from you.
+          </p>
         </motion.div>
 
-        <div className="grid lg:grid-cols-5 gap-10">
-          <motion.div className="lg:col-span-2 space-y-6"
-            initial={{ opacity: 0, x: -24 }} whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }} transition={{ duration: 0.5 }}>
+        <div className="grid lg:grid-cols-5 gap-10 items-start">
+
+          {/* Left — Contact info */}
+          <motion.div
+            className="lg:col-span-2 space-y-5"
+            initial={{ opacity: 0, x: -28 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.55 }}
+          >
+            {/* Info cards */}
             <div className="glass-card rounded-2xl p-6 space-y-5">
               {contactItems.map(({ icon: Icon, label, value, href }) => (
-                <div key={label} className="flex items-start gap-4">
-                  <div className="w-10 h-10 rounded-xl gradient-bg flex items-center justify-center flex-shrink-0">
-                    <Icon className="w-4 h-4 text-white" />
+                <div key={label} className="flex items-center gap-4">
+                  <div
+                    className="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0"
+                    style={{ background: "linear-gradient(135deg, #7c3aed, #2563eb)", boxShadow: "0 4px 16px rgba(124,58,237,0.35)" }}
+                  >
+                    <Icon className="w-4.5 h-4.5 text-white" style={{ width: "18px", height: "18px" }} />
                   </div>
                   <div>
-                    <p className="text-xs text-muted-foreground mb-0.5">{label}</p>
+                    <p className="text-xs text-muted-foreground mb-0.5 font-mono">{label}</p>
                     {href ? (
-                      <a href={href} className="text-sm text-foreground hover:text-primary transition-colors">{value}</a>
+                      <a href={href} className="text-sm font-medium text-foreground hover:text-primary transition-colors">{value}</a>
                     ) : (
-                      <p className="text-sm text-foreground">{value}</p>
+                      <p className="text-sm font-medium text-foreground">{value}</p>
                     )}
                   </div>
                 </div>
               ))}
             </div>
 
+            {/* Social */}
             <div className="glass-card rounded-2xl p-5">
               <p className="text-sm font-semibold text-foreground mb-4">Connect with me</p>
               <div className="flex gap-3">
                 {socialLinks.map(({ icon: Icon, label, href }) => (
-                  <a key={label} href={href} target="_blank" rel="noopener noreferrer"
-                    className="flex items-center gap-2 px-4 py-2 rounded-full glass border border-white/10 text-sm text-muted-foreground hover:text-white hover:border-primary/30 transition-all">
+                  <motion.a
+                    key={label}
+                    href={href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium text-muted-foreground flex-1 justify-center"
+                    style={{
+                      background: "rgba(124,58,237,0.07)",
+                      border: "1px solid rgba(124,58,237,0.18)",
+                    }}
+                    whileHover={{
+                      color: "#fff",
+                      background: "rgba(124,58,237,0.15)",
+                      borderColor: "rgba(167,139,250,0.4)",
+                      y: -2,
+                    }}
+                  >
                     <Icon className="w-4 h-4" /> {label}
-                  </a>
+                  </motion.a>
                 ))}
               </div>
             </div>
 
-            <motion.div className="glass-card rounded-2xl p-5 border border-primary/20"
-              animate={{ borderColor: ["rgba(14,165,233,0.2)", "rgba(34,211,238,0.2)", "rgba(14,165,233,0.2)"] }}
-              transition={{ duration: 4, repeat: Infinity }}>
+            {/* Available badge */}
+            <motion.div
+              className="rounded-2xl p-5"
+              style={{
+                background: "rgba(124,58,237,0.06)",
+                border: "1px solid rgba(124,58,237,0.2)",
+              }}
+              animate={{ borderColor: ["rgba(124,58,237,0.2)", "rgba(37,99,235,0.35)", "rgba(124,58,237,0.2)"] }}
+              transition={{ duration: 3.5, repeat: Infinity }}
+            >
               <div className="flex items-center gap-2 mb-2">
-                <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
-                <span className="text-sm font-semibold text-foreground">Currently Available</span>
+                <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse" />
+                <span className="text-sm font-bold text-foreground">{availabilityTitle}</span>
               </div>
               <p className="text-xs text-muted-foreground leading-relaxed">
-                Open to full-time roles, freelance projects, and consulting opportunities. Response time: within 24 hours.
+                {availabilityText}
               </p>
             </motion.div>
           </motion.div>
 
-          <motion.div className="lg:col-span-3 glass-card rounded-2xl p-7"
-            initial={{ opacity: 0, x: 24 }} whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }} transition={{ duration: 0.5, delay: 0.1 }}>
+          {/* Right — Form */}
+          <motion.div
+            className="lg:col-span-3 glass-card rounded-2xl p-7 md:p-8"
+            initial={{ opacity: 0, x: 28 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.55, delay: 0.1 }}
+          >
             <Form {...form}>
               <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
                 <div className="grid sm:grid-cols-2 gap-4">
@@ -160,7 +219,8 @@ const ContactSection = ({ content }: Props) => {
                       <FormLabel className="text-sm text-muted-foreground">Your Name</FormLabel>
                       <FormControl>
                         <Input placeholder="John Doe" {...field}
-                          className="bg-white/5 border-white/10 text-foreground placeholder:text-muted-foreground/60 focus:border-primary/50 rounded-xl" />
+                          className="rounded-xl border-white/10 focus:border-violet-500/50 transition-colors"
+                          style={{ background: "rgba(255,255,255,0.04)" }} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -170,36 +230,70 @@ const ContactSection = ({ content }: Props) => {
                       <FormLabel className="text-sm text-muted-foreground">Email Address</FormLabel>
                       <FormControl>
                         <Input placeholder="john@example.com" {...field}
-                          className="bg-white/5 border-white/10 text-foreground placeholder:text-muted-foreground/60 focus:border-primary/50 rounded-xl" />
+                          className="rounded-xl border-white/10 focus:border-violet-500/50 transition-colors"
+                          style={{ background: "rgba(255,255,255,0.04)" }} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
                   )} />
                 </div>
+
                 <FormField control={form.control} name="subject" render={({ field }) => (
                   <FormItem>
                     <FormLabel className="text-sm text-muted-foreground">Subject</FormLabel>
                     <FormControl>
                       <Input placeholder="Project Inquiry / Collaboration" {...field}
-                        className="bg-white/5 border-white/10 text-foreground placeholder:text-muted-foreground/60 focus:border-primary/50 rounded-xl" />
+                        className="rounded-xl border-white/10 focus:border-violet-500/50 transition-colors"
+                        style={{ background: "rgba(255,255,255,0.04)" }} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )} />
+
                 <FormField control={form.control} name="message" render={({ field }) => (
                   <FormItem>
                     <FormLabel className="text-sm text-muted-foreground">Message</FormLabel>
                     <FormControl>
                       <Textarea placeholder="Tell me about your project..." rows={5} {...field}
-                        className="bg-white/5 border-white/10 text-foreground placeholder:text-muted-foreground/60 focus:border-primary/50 rounded-xl resize-none" />
+                        className="rounded-xl border-white/10 focus:border-violet-500/50 transition-colors resize-none"
+                        style={{ background: "rgba(255,255,255,0.04)" }} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )} />
-                <Button type="submit" disabled={isSubmitting}
-                  className="w-full gradient-bg text-white rounded-xl py-5 font-semibold hover:opacity-90 hover:shadow-lg hover:shadow-violet-500/25 transition-all disabled:opacity-50">
-                  {isSubmitting ? "Sending..." : <><Send className="w-4 h-4 mr-2" /> Send Message</>}
-                </Button>
+
+                <motion.div whileHover={{ scale: 1.01 }} whileTap={{ scale: 0.99 }}>
+                  <Button
+                    type="submit"
+                    disabled={isSubmitting}
+                    className="w-full text-white rounded-xl py-6 font-bold text-base relative overflow-hidden"
+                    style={{
+                      background: "linear-gradient(135deg, #7c3aed 0%, #2563eb 60%, #0891b2 100%)",
+                      boxShadow: "0 6px 28px rgba(124,58,237,0.45)",
+                      border: "none",
+                    }}
+                  >
+                    {isSubmitting ? (
+                      <span className="flex items-center gap-2">
+                        <motion.span
+                          className="w-4 h-4 rounded-full border-2 border-white/30 border-t-white"
+                          animate={{ rotate: 360 }}
+                          transition={{ duration: 0.8, repeat: Infinity, ease: "linear" }}
+                        />
+                        Sending...
+                      </span>
+                    ) : (
+                      <span className="flex items-center gap-2">
+                        <Send className="w-4 h-4" /> Send Message
+                      </span>
+                    )}
+                  </Button>
+                </motion.div>
+
+                <p className="text-center text-xs text-muted-foreground flex items-center justify-center gap-1.5">
+                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500" />
+                  Your message goes straight to my inbox &amp; WhatsApp
+                </p>
               </form>
             </Form>
           </motion.div>

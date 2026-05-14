@@ -174,6 +174,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   /* ─── Admin content updates ──────────────────────────────────── */
 
+  app.put("/api/admin/site", requireAdmin, (req, res) => {
+    try { content.updateSite(req.body); res.json({ message: "Updated." }); }
+    catch { res.status(400).json({ message: "Invalid data." }); }
+  });
+
+  app.put("/api/admin/experience-meta", requireAdmin, (req, res) => {
+    try { content.updateExperienceMeta(req.body); res.json({ message: "Updated." }); }
+    catch { res.status(400).json({ message: "Invalid data." }); }
+  });
+
   app.put("/api/admin/hero", requireAdmin, (req, res) => {
     try { content.updateHero(req.body); res.json({ message: "Updated." }); }
     catch { res.status(400).json({ message: "Invalid data." }); }

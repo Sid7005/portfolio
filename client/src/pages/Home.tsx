@@ -16,8 +16,8 @@ const Home = () => {
   });
 
   useEffect(() => {
-    document.title = "Siddharajsinh Chauhan - Web Developer";
-  }, []);
+    document.title = (content as any)?.site?.pageTitle ?? "Siddharajsinh Chauhan - Web Developer";
+  }, [content]);
 
   return (
     <div className="min-h-screen">
@@ -30,7 +30,7 @@ const Home = () => {
         <ProjectsSection content={content} />
         <ContactSection content={content} />
       </main>
-      <Footer />
+      <Footer content={content} />
     </div>
   );
 };

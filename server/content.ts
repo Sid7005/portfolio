@@ -6,6 +6,14 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const DATA_PATH = join(__dirname, "content-data.json");
 
 export type ContentData = {
+  site: {
+    logoText: string;
+    logoSubtext: string;
+    fullName: string;
+    tagline: string;
+    pageTitle: string;
+    hireMeText: string;
+  };
   hero: {
     greeting: string;
     name: string;
@@ -18,9 +26,14 @@ export type ContentData = {
     email: string;
     heroImage?: string;
     logoImage?: string;
+    techBadges: string[];
+    techPills: string[];
   };
   about: {
     paragraphs: string[];
+    subheading: string;
+    stats: { value: string; label: string; sub: string }[];
+    whatIDo: { title: string; desc: string }[];
   };
   contact: {
     location: string;
@@ -28,6 +41,8 @@ export type ContentData = {
     phone: string;
     linkedinUrl: string;
     githubUrl: string;
+    availabilityTitle: string;
+    availabilityText: string;
   };
   skills: {
     frontend: string[];
@@ -36,6 +51,8 @@ export type ContentData = {
     devops: string[];
     additional: string[];
     proficiency: { name: string; level: number }[];
+    items: { name: string; category: string }[];
+    alsoComfortableWith: string;
   };
   experience: {
     id: number;
@@ -45,6 +62,10 @@ export type ContentData = {
     description: string[];
     skills: string[];
   }[];
+  experienceMeta: {
+    highlight: string;
+    location: string;
+  };
   education: {
     id: number;
     degree: string;
@@ -79,6 +100,12 @@ export const content = {
     return readData();
   },
 
+  updateSite(site: ContentData["site"]): void {
+    const data = readData();
+    data.site = site;
+    writeData(data);
+  },
+
   updateHero(hero: ContentData["hero"]): void {
     const data = readData();
     data.hero = hero;
@@ -106,6 +133,12 @@ export const content = {
   updateExperience(experience: ContentData["experience"]): void {
     const data = readData();
     data.experience = experience;
+    writeData(data);
+  },
+
+  updateExperienceMeta(meta: ContentData["experienceMeta"]): void {
+    const data = readData();
+    data.experienceMeta = meta;
     writeData(data);
   },
 

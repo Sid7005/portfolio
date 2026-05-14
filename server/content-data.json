@@ -1,4 +1,12 @@
 {
+  "site": {
+    "logoText": "SID.",
+    "logoSubtext": "Full-Stack Dev",
+    "fullName": "Siddharajsinh Chauhan",
+    "tagline": "Crafting scalable, beautiful web experiences with modern technologies.",
+    "pageTitle": "Siddharajsinh Chauhan - Web Developer",
+    "hireMeText": "Open to full-time roles and freelance projects."
+  },
   "hero": {
     "greeting": "Available for opportunities",
     "name": "Siddharajsinh Chauhan",
@@ -25,16 +33,70 @@
       }
     ],
     "linkedinUrl": "https://www.linkedin.com/in/siddharajsinh-chauhan-410741199",
-    "githubUrl": "https://github.com/",
+    "githubUrl": "https://github.com/Sid7005",
     "email": "siddharajkc294000@gmail.com",
     "heroImage": "/assets-static/images/ImportedPhoto.760428188.70688.jpeg",
-    "logoImage": "/assets-static/images/sid-avatar.png"
+    "logoImage": "/assets-static/images/sid-avatar.png",
+    "techBadges": [
+      "TypeScript",
+      "React.js",
+      "Next.js",
+      "Node.js"
+    ],
+    "techPills": [
+      "React.js",
+      "Next.js",
+      "TypeScript",
+      "Node.js",
+      "PostgreSQL"
+    ]
   },
   "about": {
     "paragraphs": [
       "I'm a Full-Stack Web Developer with 4+ years of experience building and scaling production web applications. My passion lies in crafting intuitive, performant, and beautiful solutions — from pixel-perfect React UIs to resilient Node.js backends.",
       "React and TypeScript are my primary tools of choice. I've spent the last few years building complex SPAs, optimizing performance, integrating payment gateways like Stripe, and shipping features that real users rely on every day.",
       "Outside of coding, I enjoy hiking, playing cricket, reading tech blogs, and contributing to open-source. I thrive in collaborative Agile environments and I'm always excited to take on new challenges."
+    ],
+    "subheading": "Full-Stack Developer based in Ahmedabad, India — building production-grade web apps since 2020.",
+    "stats": [
+      {
+        "value": "4+",
+        "label": "Years of Experience",
+        "sub": "Since 2020"
+      },
+      {
+        "value": "10+",
+        "label": "Projects Delivered",
+        "sub": "Live in production"
+      },
+      {
+        "value": "2",
+        "label": "Companies",
+        "sub": "ZealousWeb & Aark"
+      },
+      {
+        "value": "8.3",
+        "label": "CGPA",
+        "sub": "B.E. Computer Engg."
+      }
+    ],
+    "whatIDo": [
+      {
+        "title": "React / Next.js",
+        "desc": "Pixel-perfect, accessible UIs with TypeScript, Redux, and Framer Motion"
+      },
+      {
+        "title": "Node.js / APIs",
+        "desc": "Express, REST APIs, PostgreSQL — scalable backends built for production"
+      },
+      {
+        "title": "Cloud & DevOps",
+        "desc": "AWS, Docker, CI/CD pipelines, Vite, and deployment automation"
+      },
+      {
+        "title": "Performance",
+        "desc": "Bundle splitting, lazy loading, and caching strategies for fast UX"
+      }
     ]
   },
   "contact": {
@@ -42,7 +104,9 @@
     "email": "siddharajkc294000@gmail.com",
     "phone": "+91 8320032657",
     "linkedinUrl": "https://www.linkedin.com/in/siddharajsinh-chauhan-410741199",
-    "githubUrl": "https://github.com/"
+    "githubUrl": "https://github.com/Sid7005",
+    "availabilityTitle": "Currently Available",
+    "availabilityText": "Open to full-time roles, freelance projects, and consulting. Response within 24 hours."
   },
   "skills": {
     "frontend": [
@@ -121,7 +185,98 @@
         "name": "ASP.NET Core",
         "level": 65
       }
-    ]
+    ],
+    "items": [
+      {
+        "name": "React.js",
+        "category": "frontend"
+      },
+      {
+        "name": "Next.js",
+        "category": "frontend"
+      },
+      {
+        "name": "TypeScript",
+        "category": "frontend"
+      },
+      {
+        "name": "JavaScript",
+        "category": "frontend"
+      },
+      {
+        "name": "Tailwind CSS",
+        "category": "frontend"
+      },
+      {
+        "name": "Redux",
+        "category": "frontend"
+      },
+      {
+        "name": "HTML5",
+        "category": "frontend"
+      },
+      {
+        "name": "CSS3",
+        "category": "frontend"
+      },
+      {
+        "name": "Node.js",
+        "category": "backend"
+      },
+      {
+        "name": "Express.js",
+        "category": "backend"
+      },
+      {
+        "name": "Python",
+        "category": "backend"
+      },
+      {
+        "name": "FastAPI",
+        "category": "backend"
+      },
+      {
+        "name": "ASP.NET",
+        "category": "backend"
+      },
+      {
+        "name": "PostgreSQL",
+        "category": "database"
+      },
+      {
+        "name": "MongoDB",
+        "category": "database"
+      },
+      {
+        "name": "MySQL",
+        "category": "database"
+      },
+      {
+        "name": "Git",
+        "category": "devops"
+      },
+      {
+        "name": "GitHub",
+        "category": "devops"
+      },
+      {
+        "name": "Docker",
+        "category": "devops"
+      },
+      {
+        "name": "Vite",
+        "category": "devops"
+      },
+      {
+        "name": "Webpack",
+        "category": "devops"
+      }
+    ],
+    "alsoComfortableWith": "Bootstrap, jQuery, C#, Entity Framework, ASP.NET MVC, Razor Pages, REST / GraphQL, Stripe / Authorize.net, Google Maps API, Jest, Mocha"
+  },
+  "experienceMeta": {
+    "highlight": "Led Stripe & Authorize.net payment integrations and Google Maps autocomplete features at ZealousWeb, improving checkout UX for thousands of users.",
+    "location": "Based in Ahmedabad, India · Open to remote"
   },
   "experience": [
     {
