@@ -1,0 +1,145 @@
+import { readFileSync, writeFileSync } from "fs";
+import { join, dirname } from "path";
+import { fileURLToPath } from "url";
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
+const DATA_PATH = join(__dirname, "content-data.json");
+
+export type ContentData = {
+  hero: {
+    greeting: string;
+    name: string;
+    shortName: string;
+    roles: string[];
+    bio: string;
+    stats: { value: string; label: string }[];
+    linkedinUrl: string;
+    githubUrl: string;
+    email: string;
+    heroImage?: string;
+    logoImage?: string;
+  };
+  about: {
+    paragraphs: string[];
+  };
+  contact: {
+    location: string;
+    email: string;
+    phone: string;
+    linkedinUrl: string;
+    githubUrl: string;
+  };
+  skills: {
+    frontend: string[];
+    backend: string[];
+    database: string[];
+    devops: string[];
+    additional: string[];
+    proficiency: { name: string; level: number }[];
+  };
+  experience: {
+    id: number;
+    position: string;
+    company: string;
+    period: string;
+    description: string[];
+    skills: string[];
+  }[];
+  education: {
+    id: number;
+    degree: string;
+    institution: string;
+    period: string;
+    cgpa: string;
+  }[];
+  projects: {
+    id: number;
+    title: string;
+    category: string;
+    description: string;
+    image: string;
+    technologies: string[];
+    demoLink: string;
+    demoLinkText: string;
+    displayOrder: number;
+  }[];
+};
+
+function readData(): ContentData {
+  const raw = readFileSync(DATA_PATH, "utf-8");
+  return JSON.parse(raw) as ContentData;
+}
+
+function writeData(data: ContentData): void {
+  writeFileSync(DATA_PATH, JSON.stringify(data, null, 2), "utf-8");
+}
+
+export const content = {
+  getAll(): ContentData {
+    return readData();
+  },
+
+  updateHero(hero: ContentData["hero"]): void {
+    const data = readData();
+    data.hero = hero;
+    writeData(data);
+  },
+
+  updateAbout(about: ContentData["about"]): void {
+    const data = readData();
+    data.about = about;
+    writeData(data);
+  },
+
+  updateContact(contact: ContentData["contact"]): void {
+    const data = readData();
+    data.contact = contact;
+    writeData(data);
+  },
+
+  updateSkills(skills: ContentData["skills"]): void {
+    const data = readData();
+    data.skills = skills;
+    writeData(data);
+  },
+
+  updateExperience(experience: ContentData["experience"]): void {
+    const data = readData();
+    data.experience = experience;
+    writeData(data);
+  },
+
+  updateEducation(education: ContentData["education"]): void {
+    const data = readData();
+    data.education = education;
+    writeData(data);
+  },
+
+  addProject(project: Omit<ContentData["projects"][0], "id">): ContentData["projects"][0] {
+    const data = readData();
+    const newId = Math.max(0, ...data.projects.map((p) => p.id)) + 1;
+    const newProject = { ...project, id: newId };
+    data.projects.push(newProject);
+    data.projects.sort((a, b) => a.displayOrder - b.displayOrder);
+    writeData(data);
+    return newProject;
+  },
+
+  updateProject(id: number, updates: Partial<ContentData["projects"][0]>): boolean {
+    const data = readData();
+    const idx = data.projects.findIndex((p) => p.id === id);
+    if (idx === -1) return false;
+    data.projects[idx] = { ...data.projects[idx], ...updates, id };
+    writeData(data);
+    return true;
+  },
+
+  deleteProject(id: number): boolean {
+    const data = readData();
+    const before = data.projects.length;
+    data.projects = data.projects.filter((p) => p.id !== id);
+    if (data.projects.length === before) return false;
+    writeData(data);
+    return true;
+  },
+};

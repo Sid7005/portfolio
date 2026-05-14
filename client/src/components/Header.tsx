@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
-import { Link } from "wouter";
 import { useMobile } from "@/hooks/use-mobile";
 import { useScrollToSection } from "@/hooks/useScrollToSection";
 import { Menu, X } from "lucide-react";
-import resume from "../../assets/doc/Sid-Resume.pdf"
+import { motion, AnimatePresence } from "framer-motion";
+import resume from "../../assets/doc/Sid-Resume.pdf";
+import sidAvatarFallback from "../../assets/images/sid-avatar.png";
 
 const navLinks = [
   { href: "#home", label: "Home" },
@@ -14,119 +15,160 @@ const navLinks = [
   { href: "#contact", label: "Contact" },
 ];
 
-const Header = () => {
+type Props = { content?: any };
+
+const Header = ({ content }: Props) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [activeSection, setActiveSection] = useState("home");
   const isMobile = useMobile();
   const scrollToSection = useScrollToSection();
 
+  const heroImage = content?.hero?.logoImage || sidAvatarFallback;
+
   useEffect(() => {
     const handleScroll = () => {
-      setScrolled(window.scrollY > 10);
+      setScrolled(window.scrollY > 20);
+      const sections = navLinks.map((l) => l.href.slice(1));
+      for (const section of [...sections].reverse()) {
+        const el = document.getElementById(section);
+        if (el && window.scrollY >= el.offsetTop - 120) {
+          setActiveSection(section);
+          break;
+        }
+      }
     };
-
-    window.addEventListener("scroll", handleScroll);
+    window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const toggleMobileMenu = () => {
-    setMobileMenuOpen(!mobileMenuOpen);
-  };
-
-  const handleNavLinkClick = (href: string) => {
+  const handleNavClick = (href: string) => {
     scrollToSection(href);
-    if (mobileMenuOpen) setMobileMenuOpen(false);
+    setMobileMenuOpen(false);
   };
 
   return (
-    <header className={`fixed w-full bg-white z-50 transition-all duration-300 ${scrolled ? "shadow-md" : ""}`}>
-      <div className="container mx-auto px-4 py-3 flex justify-between items-center">
+    <motion.header
+      className={`fixed w-full z-50 transition-all duration-500 ${
+        scrolled ? "glass border-b border-sky-500/10 shadow-xl shadow-black/30" : "bg-transparent"
+      }`}
+      initial={{ y: -80, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      transition={{ duration: 0.6, ease: "easeOut" }}
+    >
+      <div className="container mx-auto px-6 py-3 flex justify-between items-center">
         {/* Logo */}
-        <a 
-          href="#home" 
-          className="text-xl font-inter font-bold text-primary"
-          onClick={(e) => {
-            e.preventDefault();
-            scrollToSection("#home");
-          }}
+        <a
+          href="#home"
+          className="flex items-center gap-2.5 group"
+          onClick={(e) => { e.preventDefault(); handleNavClick("#home"); }}
         >
-          SC<span className="text-accent">.</span>
+          {/* Avatar in a glowing hex-circle frame */}
+          <div className="relative w-9 h-9 flex-shrink-0">
+            {/* Glow ring */}
+            <div
+              className="absolute -inset-0.5 rounded-full opacity-70 group-hover:opacity-100 transition-opacity"
+              style={{ background: "linear-gradient(135deg, #0ea5e9, #22d3ee)", padding: "1.5px" }}
+            >
+              <div className="w-full h-full rounded-full" style={{ background: "#060d1b" }} />
+            </div>
+            {/* Avatar image — screen blend removes black bg */}
+            <div className="absolute inset-0 rounded-full overflow-hidden" style={{ background: "#000" }}>
+              <img
+                src={heroImage}
+                alt="SID"
+                className="w-full h-full object-contain scale-125 group-hover:scale-[1.35] transition-transform duration-300"
+                style={{ mixBlendMode: "screen" }}
+              />
+            </div>
+          </div>
+          <div className="hidden sm:flex flex-col leading-none">
+            <span className="font-black text-base font-mono gradient-text tracking-wide">SID.</span>
+            <span className="text-[9px] text-muted-foreground/60 font-mono tracking-widest uppercase">Full-Stack Dev</span>
+          </div>
         </a>
-        
-        {/* Desktop Navigation */}
-        <nav className="hidden md:block">
-          <ul className="flex space-x-8">
-            {navLinks.map((link) => (
-              <li key={link.href}>
-                <a
-                  href={link.href}
-                  className="text-dark hover:text-primary transition"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    handleNavLinkClick(link.href);
-                  }}
-                >
-                  {link.label}
-                </a>
-              </li>
-            ))}
-          </ul>
+
+        {/* Desktop Nav */}
+        <nav className="hidden md:flex items-center gap-1">
+          {navLinks.map((link) => {
+            const isActive = activeSection === link.href.slice(1);
+            return (
+              <a
+                key={link.href}
+                href={link.href}
+                onClick={(e) => { e.preventDefault(); handleNavClick(link.href); }}
+                className={`relative px-4 py-2 text-sm font-medium rounded-full transition-all duration-200 ${
+                  isActive ? "text-white" : "text-muted-foreground hover:text-white"
+                }`}
+              >
+                {isActive && (
+                  <motion.span
+                    layoutId="nav-pill"
+                    className="absolute inset-0 rounded-full"
+                    style={{ background: "linear-gradient(135deg, rgba(14,165,233,0.2), rgba(34,211,238,0.2))", border: "1px solid rgba(34,211,238,0.3)" }}
+                    transition={{ type: "spring", stiffness: 350, damping: 30 }}
+                  />
+                )}
+                <span className="relative z-10">{link.label}</span>
+              </a>
+            );
+          })}
         </nav>
-        
-        {/* Mobile Menu Button */}
-        <button 
-          className="md:hidden text-dark focus:outline-none"
-          onClick={toggleMobileMenu}
-          aria-label="Toggle menu"
-        >
-          {mobileMenuOpen ? (
-            <X className="w-6 h-6" />
-          ) : (
-            <Menu className="w-6 h-6" />
-          )}
-        </button>
-        
+
         {/* Resume Button */}
-        <a 
-          href={resume} 
-          className="hidden md:block bg-primary hover:bg-secondary text-white px-4 py-2 rounded-md transition"
+        <a
+          href={resume}
           target="_blank"
           rel="noopener noreferrer"
+          className="hidden md:flex items-center gap-2 px-5 py-2 rounded-full gradient-bg text-white text-sm font-semibold transition-all duration-300 hover:opacity-90 hover:shadow-lg hover:shadow-cyan-500/30"
         >
           Resume
         </a>
+
+        {/* Mobile Toggle */}
+        <button
+          className="md:hidden text-white/80 hover:text-white transition p-1"
+          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          aria-label="Toggle menu"
+        >
+          {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+        </button>
       </div>
-      
-      {/* Mobile Navigation */}
-      <div className={`${mobileMenuOpen ? 'block' : 'hidden'} md:hidden bg-white border-t`}>
-        <ul className="container mx-auto px-4 py-2">
-          {navLinks.map((link) => (
-            <li key={link.href}>
+
+      {/* Mobile Menu */}
+      <AnimatePresence>
+        {mobileMenuOpen && (
+          <motion.div
+            className="md:hidden glass border-t border-sky-500/10"
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.25 }}
+          >
+            <div className="container mx-auto px-6 py-4 flex flex-col gap-1">
+              {navLinks.map((link) => (
+                <a
+                  key={link.href}
+                  href={link.href}
+                  className="py-2.5 px-4 rounded-lg text-muted-foreground hover:text-white hover:bg-white/5 transition"
+                  onClick={(e) => { e.preventDefault(); handleNavClick(link.href); }}
+                >
+                  {link.label}
+                </a>
+              ))}
               <a
-                href={link.href}
-                className="block py-2 text-dark hover:text-primary transition"
-                onClick={(e) => {
-                  e.preventDefault();
-                  handleNavLinkClick(link.href);
-                }}
+                href={resume}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-3 py-2.5 px-4 rounded-full gradient-bg text-white text-center font-semibold text-sm"
               >
-                {link.label}
+                Resume
               </a>
-            </li>
-          ))}
-          <li className="pt-2 mt-2 border-t">
-            <a 
-              href={resume} 
-              className="block bg-primary hover:bg-secondary text-white px-4 py-2 rounded-md text-center transition"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Resume
-            </a>
-          </li>
-        </ul>
-      </div>
-    </header>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </motion.header>
   );
 };
 

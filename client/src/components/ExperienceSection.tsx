@@ -1,182 +1,122 @@
 import { motion } from "framer-motion";
-import { Briefcase, GraduationCap } from "lucide-react";
-import { experience, education } from "@/lib/constants";
+import { Briefcase, GraduationCap, Calendar } from "lucide-react";
+import { experience as defaultExperience, education as defaultEducation } from "@/lib/constants";
 
-const ExperienceTimelineItem = ({
-  position,
-  company,
-  period,
-  description,
-  skills,
-  isEven
-}: {
-  position: string;
-  company: string;
-  period: string;
-  description: string[];
-  skills: string[];
-  isEven: boolean;
-}) => {
-  return (
-    <div className={`relative md:flex md:justify-between md:mb-0 py-8 ${isEven ? 'right-timeline' : 'left-timeline'}`}>
-      {/* Left Content (even) or empty space (odd) */}
-      {isEven ? (
-        <motion.div
-          className="md:w-5/12 bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition duration-300 md:mr-0"
-          initial={{ opacity: 0, x: -50 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
-        >
-          <div className="inline-block px-3 py-1 bg-blue-100 text-primary rounded-full text-sm font-medium mb-4">{period}</div>
-          <h3 className="text-xl font-inter font-semibold mb-2">{position}</h3>
-          <h4 className="text-lg text-gray-600 mb-4">{company}</h4>
-          <ul className="list-disc list-inside space-y-2 text-gray-700">
-            {description.map((item, index) => (
-              <li key={index}>{item}</li>
-            ))}
-          </ul>
-          <div className="mt-4 flex flex-wrap gap-2">
-            {skills.map(skill => (
-              <span key={skill} className="bg-gray-100 text-gray-800 px-2 py-1 rounded text-sm">
-                {skill}
-              </span>
-            ))}
-          </div>
-        </motion.div>
-      ) : (
-        <div className="hidden md:block md:w-5/12"></div>
-      )}
+type Props = { content?: any };
 
-      {/* Timeline dot */}
-      <div className="hidden md:flex absolute left-1/2 transform -translate-x-1/2 -translate-y-4 w-8 h-8 rounded-full bg-primary text-white items-center justify-center">
-        <Briefcase className="w-4 h-4" />
-      </div>
-
-      {/* Right Content (odd) or empty space (even) */}
-      {!isEven ? (
-        <motion.div
-          className="md:w-5/12 bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition duration-300 ml-0"
-          initial={{ opacity: 0, x: 50 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
-        >
-          <div className="inline-block px-3 py-1 bg-blue-100 text-primary rounded-full text-sm font-medium mb-4">{period}</div>
-          <h3 className="text-xl font-inter font-semibold mb-2">{position}</h3>
-          <h4 className="text-lg text-gray-600 mb-4">{company}</h4>
-          <ul className="list-disc list-inside space-y-2 text-gray-700">
-            {description.map((item, index) => (
-              <li key={index}>{item}</li>
-            ))}
-          </ul>
-          <div className="mt-4 flex flex-wrap gap-2">
-            {skills.map(skill => (
-              <span key={skill} className="bg-gray-100 text-gray-800 px-2 py-1 rounded text-sm">
-                {skill}
-              </span>
-            ))}
-          </div>
-        </motion.div>
-      ) : (
-        <div className="hidden md:block md:w-5/12"></div>
-      )}
+const ExperienceCard = ({ position, company, period, description, skills, index }: {
+  position: string; company: string; period: string;
+  description: string[]; skills: string[]; index: number;
+}) => (
+  <motion.div className="relative pl-8 pb-12 last:pb-0"
+    initial={{ opacity: 0, x: -24 }} whileInView={{ opacity: 1, x: 0 }}
+    viewport={{ once: true }} transition={{ duration: 0.5, delay: index * 0.15 }}>
+    <div className="absolute left-0 top-0 bottom-0 w-px bg-gradient-to-b from-primary/60 via-primary/20 to-transparent" />
+    <div className="absolute left-0 top-1.5 -translate-x-1/2 w-4 h-4 rounded-full gradient-bg border-2 border-background flex items-center justify-center">
+      <div className="w-1.5 h-1.5 rounded-full bg-white" />
     </div>
-  );
-};
-
-const EducationCard = ({
-  degree,
-  institution,
-  period,
-  gpa
-}: {
-  degree: string;
-  institution: string;
-  period: string;
-  gpa: string
-}) => {
-  return (
-    <motion.div
-      className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition duration-300"
-      initial={{ opacity: 0, y: 30 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.5 }}
-    >
-      <div className="flex items-center mb-4">
-        <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center text-primary">
-          <GraduationCap className="w-6 h-6" />
+    <div className="glass-card rounded-2xl p-6 ml-4 group">
+      <div className="flex flex-wrap items-start justify-between gap-3 mb-4">
+        <div>
+          <h3 className="text-lg font-bold text-foreground mb-1">{position}</h3>
+          <div className="flex items-center gap-2 text-sm text-muted-foreground">
+            <Briefcase className="w-3.5 h-3.5 text-primary" />
+            <span className="font-medium text-primary">{company}</span>
+          </div>
         </div>
-        <div className="ml-4">
-          <h3 className="text-xl font-inter font-semibold">{degree}</h3>
-          <p className="text-gray-600">{institution}</p>
-          <span className="text-gray-500">{period}</span>
+        <span className="flex items-center gap-1.5 text-xs text-muted-foreground font-mono glass border border-white/8 px-3 py-1.5 rounded-full">
+          <Calendar className="w-3 h-3" /> {period}
+        </span>
+      </div>
+      <ul className="space-y-2 mb-4">
+        {description.map((item, i) => (
+          <li key={i} className="flex gap-2 text-sm text-muted-foreground leading-relaxed">
+            <span className="text-primary mt-1.5 flex-shrink-0 w-1 h-1 rounded-full bg-primary" />
+            {item}
+          </li>
+        ))}
+      </ul>
+      <div className="flex flex-wrap gap-1.5">
+        {skills.map((skill) => (
+          <span key={skill} className="badge-tech text-xs">{skill}</span>
+        ))}
+      </div>
+    </div>
+  </motion.div>
+);
+
+const EducationCard = ({ degree, institution, period, cgpa, index }: {
+  degree: string; institution: string; period: string; cgpa: string; index: number;
+}) => (
+  <motion.div className="glass-card rounded-2xl p-6"
+    initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }}
+    viewport={{ once: true }} transition={{ duration: 0.5, delay: index * 0.1 }}>
+    <div className="flex items-start gap-4">
+      <div className="w-11 h-11 rounded-xl gradient-bg flex items-center justify-center flex-shrink-0">
+        <GraduationCap className="w-5 h-5 text-white" />
+      </div>
+      <div className="flex-1 min-w-0">
+        <h4 className="font-semibold text-foreground text-sm leading-snug mb-1">{degree}</h4>
+        <p className="text-primary text-sm font-medium">{institution}</p>
+        <div className="flex flex-wrap items-center gap-3 mt-2">
+          <span className="flex items-center gap-1 text-xs text-muted-foreground font-mono">
+            <Calendar className="w-3 h-3" /> {period}
+          </span>
+          {cgpa && <span className="badge-tech text-xs">CGPA: {cgpa}</span>}
         </div>
       </div>
-    </motion.div>
-  );
-};
+    </div>
+  </motion.div>
+);
 
-const ExperienceSection = () => {
+const ExperienceSection = ({ content }: Props) => {
+  const experienceData = content?.experience ?? defaultExperience;
+  const educationData = content?.education ?? defaultEducation;
+
   return (
-    <section id="experience" className="py-16 md:py-24 bg-white">
-      <div className="container mx-auto px-4">
-        <motion.div
-          className="text-center"
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
-        >
-          <h2 className="text-3xl md:text-4xl font-inter font-bold">Work Experience</h2>
-          <div className="h-1 w-20 bg-primary mx-auto mt-4 mb-8 rounded-full"></div>
-          <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-            My professional journey in the software development industry.
-          </p>
+    <section id="experience" className="py-24 md:py-32 relative overflow-hidden">
+      <div className="absolute top-0 left-0 w-full h-1 opacity-60"
+        style={{ background: "linear-gradient(90deg, transparent, #0ea5e9, #22d3ee, transparent)" }} />
+
+      <div className="container mx-auto px-6">
+        <motion.div className="text-center mb-16"
+          initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }} transition={{ duration: 0.5 }}>
+          <p className="font-mono text-sm text-primary mb-3">// my journey</p>
+          <h2 className="section-heading gradient-text inline-block">Experience & Education</h2>
+          <p className="section-subheading mt-4">My professional journey and academic background.</p>
         </motion.div>
 
-        {/* Timeline */}
-        <div className="relative">
-          {/* Timeline line */}
-          <div className="hidden md:block absolute left-1/2 transform -translate-x-1/2 h-full w-1 bg-gray-200"></div>
-
-          {/* Experience Items */}
-          {experience.map((exp, index) => (
-            <ExperienceTimelineItem
-              key={index}
-              position={exp.position}
-              company={exp.company}
-              period={exp.period}
-              description={exp.description}
-              skills={exp.skills}
-              isEven={index % 2 !== 0}
-            />
-          ))}
-        </div>
-
-        {/* Education */}
-        <motion.div
-          className="mt-20"
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
-        >
-          <h2 className="text-2xl md:text-3xl font-inter font-bold text-center mb-10">Education</h2>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {education.map((edu, index) => (
-              <EducationCard
-                key={index}
-                degree={edu.degree}
-                institution={edu.institution}
-                period={edu.period}
-                gpa={edu.cgpa}
-              />
+        <div className="grid lg:grid-cols-5 gap-12">
+          <div className="lg:col-span-3">
+            <h3 className="text-sm font-mono text-muted-foreground mb-8 flex items-center gap-2">
+              <Briefcase className="w-4 h-4 text-primary" /> Work Experience
+            </h3>
+            {experienceData.map((exp: any, i: number) => (
+              <ExperienceCard key={exp.id ?? i} {...exp} index={i} />
             ))}
           </div>
-        </motion.div>
+
+          <div className="lg:col-span-2">
+            <h3 className="text-sm font-mono text-muted-foreground mb-8 flex items-center gap-2">
+              <GraduationCap className="w-4 h-4 text-secondary" /> Education
+            </h3>
+            <div className="space-y-4">
+              {educationData.map((edu: any, i: number) => (
+                <EducationCard key={edu.id ?? i} {...edu} index={i} />
+              ))}
+            </div>
+
+            <motion.div className="mt-6 glass-card rounded-2xl p-5 border-l-2 border-primary"
+              initial={{ opacity: 0 }} whileInView={{ opacity: 1 }}
+              viewport={{ once: true }} transition={{ delay: 0.3 }}>
+              <p className="text-xs font-mono text-primary mb-1">// fact</p>
+              <p className="text-sm text-muted-foreground">
+                Led Stripe & Authorize.net payment integrations and Google Maps autocomplete features at ZealousWeb, improving checkout UX for thousands of users.
+              </p>
+            </motion.div>
+          </div>
+        </div>
       </div>
     </section>
   );

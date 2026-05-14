@@ -7,22 +7,28 @@ import ProjectsSection from "@/components/ProjectsSection";
 import ContactSection from "@/components/ContactSection";
 import Footer from "@/components/Footer";
 import { useEffect } from "react";
+import { useQuery } from "@tanstack/react-query";
 
 const Home = () => {
+  const { data: content } = useQuery({
+    queryKey: ["/api/content"],
+    staleTime: 30_000,
+  });
+
   useEffect(() => {
     document.title = "Siddharajsinh Chauhan - Web Developer";
   }, []);
 
   return (
     <div className="min-h-screen">
-      <Header />
+      <Header content={content} />
       <main>
-        <HeroSection />
-        <AboutSection />
-        <SkillsSection />
-        <ExperienceSection />
-        <ProjectsSection />
-        <ContactSection />
+        <HeroSection content={content} />
+        <AboutSection content={content} />
+        <SkillsSection content={content} />
+        <ExperienceSection content={content} />
+        <ProjectsSection content={content} />
+        <ContactSection content={content} />
       </main>
       <Footer />
     </div>
