@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useLocation } from "wouter";
-import { motion } from "framer-motion";
-import { Lock, Eye, EyeOff, Loader2 } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Lock, Eye, EyeOff, Loader2, KeyRound, CheckCircle2 } from "lucide-react";
 
 const Login = () => {
   const [, setLocation] = useLocation();
@@ -9,6 +9,25 @@ const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [forgotLoading, setForgotLoading] = useState(false);
+  const [forgotStatus, setForgotStatus] = useState<"idle" | "sent" | "error">("idle");
+  const [forgotMsg, setForgotMsg] = useState("");
+
+  const handleForgotPassword = async () => {
+    setForgotLoading(true);
+    setForgotStatus("idle");
+    setForgotMsg("");
+    try {
+      const res = await fetch("/api/admin/forgot-password", { method: "POST" });
+      const data = await res.json();
+      if (!res.ok) { setForgotStatus("error"); setForgotMsg(data.message || "Failed."); }
+      else { setForgotStatus("sent"); setForgotMsg(data.message); }
+    } catch {
+      setForgotStatus("error"); setForgotMsg("Connection failed.");
+    } finally {
+      setForgotLoading(false);
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -107,6 +126,38 @@ const Login = () => {
               {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Lock className="w-4 h-4" />}
               {loading ? "Authenticating..." : "Access Dashboard"}
             </button>
+
+            <div className="pt-1 text-center">
+              <button
+                type="button"
+                onClick={handleForgotPassword}
+                disabled={forgotLoading || forgotStatus === "sent"}
+                className="text-xs text-muted-foreground hover:text-primary transition disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {forgotLoading ? (
+                  <span className="flex items-center justify-center gap-1.5">
+                    <Loader2 className="w-3 h-3 animate-spin" /> Sending...
+                  </span>
+                ) : "Forgot password? Email it to me"}
+              </button>
+
+              <AnimatePresence>
+                {forgotStatus !== "idle" && (
+                  <motion.p
+                    className={`mt-2 text-xs flex items-center justify-center gap-1.5 ${
+                      forgotStatus === "sent" ? "text-emerald-400" : "text-destructive"
+                    }`}
+                    initial={{ opacity: 0, y: -4 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0 }}
+                  >
+                    {forgotStatus === "sent" && <CheckCircle2 className="w-3.5 h-3.5" />}
+                    <KeyRound className={`w-3.5 h-3.5 ${forgotStatus === "sent" ? "hidden" : ""}`} />
+                    {forgotMsg}
+                  </motion.p>
+                )}
+              </AnimatePresence>
+            </div>
           </form>
         </div>
 

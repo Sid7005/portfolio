@@ -378,7 +378,7 @@ const HeroSection = ({ content }: Props) => {
     <section
       id="home"
       className="relative min-h-screen w-full flex items-center overflow-hidden"
-      style={{ background: "linear-gradient(135deg, #07071a 0%, #0d0920 45%, #060e1e 100%)" }}
+      style={{ background: "var(--hero-bg)" }}
     >
       {/* ── Canvas particle network (z-index 1) ─────────────────── */}
       <ParticleNetwork />

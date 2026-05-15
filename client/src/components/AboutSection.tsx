@@ -121,7 +121,7 @@ const AboutSection = ({ content }: Props) => {
     <section
       id="about"
       className="py-24 md:py-32 relative overflow-hidden"
-      style={{ background: "linear-gradient(180deg, #07071a 0%, #090620 50%, #07071a 100%)" }}
+      style={{ background: "var(--section-bg)" }}
     >
       <SectionBg variant="about" />
       <div className="absolute top-0 left-0 w-full h-px section-accent-line" />

@@ -84,6 +84,16 @@ export type ContentData = {
     demoLinkText: string;
     displayOrder: number;
   }[];
+  testimonials: {
+    id: number;
+    name: string;
+    role: string;
+    company: string;
+    quote: string;
+    rating: number;
+    color: string;
+  }[];
+  sections: Record<string, boolean>;
 };
 
 function readData(): ContentData {
@@ -172,6 +182,42 @@ export const content = {
     const before = data.projects.length;
     data.projects = data.projects.filter((p) => p.id !== id);
     if (data.projects.length === before) return false;
+    writeData(data);
+    return true;
+  },
+
+  updateSections(sections: Record<string, boolean>): void {
+    const data = readData();
+    data.sections = sections;
+    writeData(data);
+  },
+
+  addTestimonial(t: Omit<ContentData["testimonials"][0], "id">): ContentData["testimonials"][0] {
+    const data = readData();
+    if (!data.testimonials) data.testimonials = [];
+    const newId = Math.max(0, ...data.testimonials.map((x) => x.id)) + 1;
+    const newT = { ...t, id: newId };
+    data.testimonials.push(newT);
+    writeData(data);
+    return newT;
+  },
+
+  updateTestimonial(id: number, updates: Partial<ContentData["testimonials"][0]>): boolean {
+    const data = readData();
+    if (!data.testimonials) data.testimonials = [];
+    const idx = data.testimonials.findIndex((x) => x.id === id);
+    if (idx === -1) return false;
+    data.testimonials[idx] = { ...data.testimonials[idx], ...updates, id };
+    writeData(data);
+    return true;
+  },
+
+  deleteTestimonial(id: number): boolean {
+    const data = readData();
+    if (!data.testimonials) return false;
+    const before = data.testimonials.length;
+    data.testimonials = data.testimonials.filter((x) => x.id !== id);
+    if (data.testimonials.length === before) return false;
     writeData(data);
     return true;
   },

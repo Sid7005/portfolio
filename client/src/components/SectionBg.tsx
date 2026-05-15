@@ -199,8 +199,8 @@ export const SectionBg = ({ variant }: Props) => {
         });
 
         /* Sweep gradient */
-        const sweep = ctx.createConicalGradient
-          ? (ctx as any).createConicalGradient(angle, X, Y)
+        const sweep = (ctx as any).createConicGradient
+          ? (ctx as any).createConicGradient(angle, X, Y)
           : null;
 
         if (!sweep) {

@@ -88,6 +88,23 @@ const DEFAULT_CONTENT = {
     { id: 1, degree: "Bachelor of Engineering in Computer Engineering", institution: "D.A. Degree Engineering & Technology", period: "2020 - 2023", cgpa: "8.3/10.0" },
     { id: 2, degree: "Diploma in Computer Engineering", institution: "D.A. Diploma Engineering & Technology", period: "2016 - 2019", cgpa: "7.3/10.0" },
   ],
+  sections: {
+    hero: true,
+    about: true,
+    skills: true,
+    experience: true,
+    projects: true,
+    testimonials: false,
+    contact: true,
+  },
+  testimonials: [
+    { id: 1, name: "Ravi Patel", role: "Product Manager", company: "ZealousWeb Technologies", quote: "Sid turned around a complex Stripe + Authorize.net integration in record time. His TypeScript is clean, his PRs are well-structured, and he always asks the right clarifying questions before diving in.", rating: 5, color: "#7c3aed" },
+    { id: 2, name: "Anita Sharma", role: "Lead Designer", company: "ZealousWeb Technologies", quote: "Working with Sid on the React UI was a pleasure. He translates Figma comps pixel-perfectly and proactively suggests micro-animations that genuinely improve the UX rather than just adding noise.", rating: 5, color: "#2563eb" },
+    { id: 3, name: "Mihir Desai", role: "Backend Engineer", company: "Aark Digital", quote: "Sid's Node/Express APIs are consistently well-thought-out — proper error handling, sensible status codes, and he writes integration tests without being asked. A developer you can actually depend on.", rating: 5, color: "#06b6d4" },
+    { id: 4, name: "Priya Mehta", role: "Engineering Manager", company: "ZealousWeb Technologies", quote: "He shipped a Google Maps autocomplete feature end-to-end in 3 days with zero reported bugs. Strong self-starter who doesn't need his hand held through ambiguous requirements.", rating: 5, color: "#ec4899" },
+    { id: 5, name: "Jatin Vora", role: "Full-Stack Developer", company: "Freelance Collaborator", quote: "We built a multi-tenant SaaS dashboard together. Sid's performance optimisations — bundle splitting, lazy routes, memo boundaries — cut initial load from 4.2 s to under 1.3 s. Impressive stuff.", rating: 5, color: "#a78bfa" },
+    { id: 6, name: "Sneha Kapoor", role: "QA Engineer", company: "ZealousWeb Technologies", quote: "His code quality means our QA cycles are shorter. Fewer regressions, self-documenting components, and he actually writes unit tests alongside features. A rare find in the frontend world.", rating: 5, color: "#34d399" },
+  ],
   projects: [
     {
       id: 1,
@@ -248,7 +265,7 @@ export default async function handler(req: Request) {
 
     // ── Section updates (hero / about / contact / skills / experience / education)
 
-    const sectionMatch = pathname.match(/^\/api\/admin\/(hero|about|contact|skills|experience|education)$/);
+    const sectionMatch = pathname.match(/^\/api\/admin\/(hero|about|contact|skills|experience|education|sections)$/);
     if (sectionMatch && method === "PUT") {
       const section = sectionMatch[1];
       const body = await req.json();
@@ -293,6 +310,45 @@ export default async function handler(req: Request) {
         const before = projects.length;
         data.projects = projects.filter((p) => p.id !== id);
         if ((data.projects as unknown[]).length === before) return json({ message: "Not found." }, 404);
+        await saveContent(data);
+        return json({ message: "Deleted." });
+      }
+    }
+
+    // ── Testimonials ───────────────────────────────────────────────────────────
+
+    if (pathname === "/api/admin/testimonials" && method === "POST") {
+      const body = await req.json() as Record<string, unknown>;
+      const data = await getContent();
+      const testimonials = (data.testimonials as Record<string, unknown>[]) ?? [];
+      const newId = Math.max(0, ...testimonials.map((t) => t.id as number)) + 1;
+      const newT = { ...body, id: newId };
+      testimonials.push(newT);
+      data.testimonials = testimonials;
+      await saveContent(data);
+      return json(newT, 201);
+    }
+
+    const testimonialMatch = pathname.match(/^\/api\/admin\/testimonials\/(\d+)$/);
+    if (testimonialMatch) {
+      const id = parseInt(testimonialMatch[1], 10);
+      const data = await getContent();
+      const testimonials = (data.testimonials as Record<string, unknown>[]) ?? [];
+
+      if (method === "PUT") {
+        const body = await req.json() as Record<string, unknown>;
+        const idx = testimonials.findIndex((t) => t.id === id);
+        if (idx === -1) return json({ message: "Not found." }, 404);
+        testimonials[idx] = { ...testimonials[idx], ...body, id };
+        data.testimonials = testimonials;
+        await saveContent(data);
+        return json({ message: "Updated." });
+      }
+
+      if (method === "DELETE") {
+        const before = testimonials.length;
+        data.testimonials = testimonials.filter((t) => t.id !== id);
+        if ((data.testimonials as unknown[]).length === before) return json({ message: "Not found." }, 404);
         await saveContent(data);
         return json({ message: "Deleted." });
       }

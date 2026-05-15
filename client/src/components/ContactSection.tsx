@@ -86,7 +86,7 @@ const ContactSection = ({ content }: Props) => {
     <section
       id="contact"
       className="py-24 md:py-32 relative overflow-hidden"
-      style={{ background: "linear-gradient(135deg, #07071a 0%, #0d0520 40%, #06101e 100%)" }}
+      style={{ background: "var(--section-bg)" }}
     >
       <SectionBg variant="contact" />
       <div className="absolute top-0 left-0 w-full h-px section-accent-line" />

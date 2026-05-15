@@ -30,6 +30,6 @@ export default defineConfig({
     emptyOutDir: true,
   },
   optimizeDeps: {
-    include: ["@react-pdf/renderer"],
+    include: ["@react-pdf/renderer", "qrcode"],
   },
 });

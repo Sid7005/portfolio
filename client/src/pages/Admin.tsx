@@ -5,7 +5,7 @@ import { useToast } from "@/hooks/use-toast";
 import {
   LayoutDashboard, User, Briefcase, Code2, FolderOpen,
   Mail, LogOut, Plus, Trash2, Save, Loader2, ChevronDown, ChevronUp,
-  Upload, ImageIcon, FileText, Globe,
+  Upload, ImageIcon, FileText, Globe, Layers, MessageSquare,
 } from "lucide-react";
 
 type ContentData = {
@@ -18,16 +18,20 @@ type ContentData = {
   experienceMeta: any;
   education: any[];
   projects: any[];
+  testimonials: any[];
+  sections: Record<string, boolean>;
 };
 
 const tabs = [
   { id: "site",       label: "Site",       icon: Globe         },
+  { id: "sections",   label: "Sections",   icon: Layers        },
   { id: "hero",       label: "Hero",       icon: User          },
   { id: "about",      label: "About",      icon: LayoutDashboard },
   { id: "skills",     label: "Skills",     icon: Code2         },
   { id: "experience", label: "Experience", icon: Briefcase     },
-  { id: "projects",   label: "Projects",   icon: FolderOpen    },
-  { id: "contact",    label: "Contact",    icon: Mail          },
+  { id: "projects",      label: "Projects",      icon: FolderOpen    },
+  { id: "testimonials",  label: "Testimonials",  icon: MessageSquare },
+  { id: "contact",       label: "Contact",       icon: Mail          },
 ];
 
 async function apiFetch(url: string, method = "GET", body?: any) {
@@ -273,6 +277,76 @@ const Field = ({ label, value, onChange, multiline = false, rows = 2, mono = fal
     )}
   </div>
 );
+
+/* ── Sub-panel: Sections Visibility ─────────────────────────────── */
+const SECTION_LABELS: { key: string; label: string; description: string }[] = [
+  { key: "hero",         label: "Hero",         description: "Main intro section with name, bio & photo" },
+  { key: "about",        label: "About",        description: "About me paragraphs, stats & what I do cards" },
+  { key: "skills",       label: "Skills",       description: "Tech skills grid & proficiency bars" },
+  { key: "experience",   label: "Experience",   description: "Work history & education timeline" },
+  { key: "projects",     label: "Projects",     description: "Featured project cards" },
+  { key: "testimonials", label: "Testimonials", description: "Client / colleague testimonials carousel" },
+  { key: "contact",      label: "Contact",      description: "Contact form & info card" },
+];
+
+const SectionsPanel = ({ data, onSave }: { data: Record<string, boolean>; onSave: (d: Record<string, boolean>) => void }) => {
+  const DEFAULT_SECTIONS: Record<string, boolean> = {
+    hero: true, about: true, skills: true, experience: true,
+    projects: true, testimonials: false, contact: true,
+  };
+  const [form, setForm] = useState<Record<string, boolean>>({ ...DEFAULT_SECTIONS, ...data });
+  const { toast } = useToast();
+  const [saving, setSaving] = useState(false);
+
+  const toggle = (key: string) => setForm((prev) => ({ ...prev, [key]: !prev[key] }));
+
+  const save = async () => {
+    setSaving(true);
+    try {
+      await apiFetch("/api/admin/sections", "PUT", form);
+      onSave(form);
+      toast({ title: "Section visibility saved!" });
+    } catch (e: any) { toast({ title: "Save failed", description: e.message, variant: "destructive" }); }
+    finally { setSaving(false); }
+  };
+
+  return (
+    <div className="space-y-5">
+      <p className="text-xs text-muted-foreground/60">Toggle sections on or off. Hidden sections are removed from the public portfolio page.</p>
+      <div className="space-y-3">
+        {SECTION_LABELS.map(({ key, label, description }) => {
+          const enabled = form[key] !== false;
+          return (
+            <div key={key}
+              className={`flex items-center justify-between p-4 rounded-xl border transition-all ${
+                enabled ? "border-primary/30 bg-white/5" : "border-white/8 bg-white/2 opacity-60"
+              }`}>
+              <div>
+                <p className="text-sm font-medium text-foreground">{label}</p>
+                <p className="text-xs text-muted-foreground mt-0.5">{description}</p>
+              </div>
+              <button
+                type="button"
+                onClick={() => toggle(key)}
+                className={`relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 focus:outline-none ${
+                  enabled ? "bg-cyan-500" : "bg-white/15"
+                }`}
+                role="switch"
+                aria-checked={enabled}>
+                <span
+                  className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ${
+                    enabled ? "translate-x-5" : "translate-x-0"
+                  }`}
+                />
+              </button>
+            </div>
+          );
+        })}
+      </div>
+      <SaveBtn saving={saving} onClick={save} />
+    </div>
+  );
+};
 
 /* ── Sub-panel: Site ─────────────────────────────────────────────── */
 const SitePanel = ({ data, onSave }: { data: any; onSave: (d: any) => void }) => {
@@ -604,6 +678,141 @@ const ExperiencePanel = ({ data, meta, onSaveData, onSaveMeta }: {
   );
 };
 
+/* ── Sub-panel: Testimonials ─────────────────────────────────────── */
+const COLORS = ["#7c3aed","#2563eb","#06b6d4","#ec4899","#a78bfa","#34d399","#f59e0b","#ef4444","#10b981","#f97316"];
+
+const TestimonialsPanel = ({ data, onChange }: { data: any[]; onChange: (d: any[]) => void }) => {
+  const { toast } = useToast();
+  const [expanded, setExpanded] = useState<number | null>(null);
+  const [savingId, setSavingId] = useState<number | null>(null);
+
+  const saveTestimonial = async (t: any) => {
+    setSavingId(t.id);
+    try {
+      await apiFetch(`/api/admin/testimonials/${t.id}`, "PUT", t);
+      toast({ title: "Testimonial saved!" });
+    } catch (e: any) { toast({ title: "Save failed", description: e.message, variant: "destructive" }); }
+    finally { setSavingId(null); }
+  };
+
+  const deleteTestimonial = async (id: number) => {
+    if (!confirm("Delete this testimonial?")) return;
+    try {
+      await apiFetch(`/api/admin/testimonials/${id}`, "DELETE");
+      onChange(data.filter((t) => t.id !== id));
+      toast({ title: "Testimonial deleted." });
+    } catch (e: any) { toast({ title: "Delete failed", description: e.message, variant: "destructive" }); }
+  };
+
+  const addTestimonial = async () => {
+    try {
+      const newT = await apiFetch("/api/admin/testimonials", "POST", {
+        name: "New Person", role: "Role", company: "Company",
+        quote: "Their feedback here.", rating: 5,
+        color: COLORS[data.length % COLORS.length],
+      });
+      onChange([...data, newT]);
+      setExpanded(newT.id);
+    } catch (e: any) { toast({ title: "Failed to add", description: e.message, variant: "destructive" }); }
+  };
+
+  const updateLocal = (id: number, updates: any) =>
+    onChange(data.map((t) => t.id === id ? { ...t, ...updates } : t));
+
+  return (
+    <div className="space-y-3">
+      <div className="flex justify-end mb-4">
+        <button onClick={addTestimonial}
+          className="flex items-center gap-2 px-4 py-2 rounded-full gradient-bg text-white text-sm font-medium hover:opacity-90 transition">
+          <Plus className="w-4 h-4" /> Add Testimonial
+        </button>
+      </div>
+      {data.length === 0 && (
+        <p className="text-sm text-muted-foreground text-center py-8">No testimonials yet. Click "Add Testimonial" to get started.</p>
+      )}
+      {data.map((t) => (
+        <div key={t.id} className="glass-card rounded-xl overflow-hidden">
+          <button className="w-full flex items-center justify-between px-4 py-3 text-left hover:bg-white/3 transition"
+            onClick={() => setExpanded(expanded === t.id ? null : t.id)}>
+            <div className="flex items-center gap-3 min-w-0">
+              <div className="w-3 h-3 rounded-full flex-shrink-0" style={{ background: t.color ?? "#7c3aed" }} />
+              <div className="min-w-0">
+                <span className="font-medium text-sm">{t.name}</span>
+                <span className="text-xs text-muted-foreground ml-2 font-mono">{t.role} · {t.company}</span>
+              </div>
+            </div>
+            <div className="flex items-center gap-2 flex-shrink-0">
+              <span className="badge-tech text-xs">★ {t.rating}</span>
+              {expanded === t.id ? <ChevronUp className="w-4 h-4 text-muted-foreground" /> : <ChevronDown className="w-4 h-4 text-muted-foreground" />}
+            </div>
+          </button>
+          {expanded === t.id && (
+            <div className="px-4 pb-4 space-y-3 border-t border-white/5 pt-3">
+              {([
+                ["name", "Name"],
+                ["role", "Role / Title"],
+                ["company", "Company"],
+              ] as [string, string][]).map(([key, label]) => (
+                <div key={key}>
+                  <label className="block text-xs text-muted-foreground mb-1">{label}</label>
+                  <input className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-sm text-foreground focus:outline-none focus:border-primary/50"
+                    value={t[key] ?? ""}
+                    onChange={(e) => updateLocal(t.id, { [key]: e.target.value })} />
+                </div>
+              ))}
+              <div>
+                <label className="block text-xs text-muted-foreground mb-1">Quote / Feedback</label>
+                <textarea rows={4}
+                  className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-sm text-foreground focus:outline-none focus:border-primary/50 resize-none"
+                  value={t.quote ?? ""}
+                  onChange={(e) => updateLocal(t.id, { quote: e.target.value })} />
+              </div>
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-xs text-muted-foreground mb-1">Rating (1–5)</label>
+                  <select
+                    className="w-full border border-white/10 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-primary/50"
+                    style={{ background: "#0d0f1a", color: "white" }}
+                    value={t.rating ?? 5}
+                    onChange={(e) => updateLocal(t.id, { rating: parseInt(e.target.value) })}>
+                    {[1,2,3,4,5].map((n) => (
+                      <option key={n} value={n} style={{ background: "#0d0f1a", color: "white" }}>
+                        {n} star{n > 1 ? "s" : ""}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-xs text-muted-foreground mb-1">Accent Color (hex)</label>
+                  <div className="flex items-center gap-2">
+                    <input type="color" className="w-9 h-9 rounded cursor-pointer border-0 bg-transparent p-0.5"
+                      value={t.color ?? "#7c3aed"}
+                      onChange={(e) => updateLocal(t.id, { color: e.target.value })} />
+                    <input className="flex-1 bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-sm text-foreground focus:outline-none focus:border-primary/50 font-mono"
+                      value={t.color ?? ""}
+                      onChange={(e) => updateLocal(t.id, { color: e.target.value })} />
+                  </div>
+                </div>
+              </div>
+              <div className="flex justify-between pt-2">
+                <button onClick={() => deleteTestimonial(t.id)}
+                  className="flex items-center gap-1.5 text-sm text-destructive/70 hover:text-destructive transition">
+                  <Trash2 className="w-3.5 h-3.5" /> Delete
+                </button>
+                <button onClick={() => saveTestimonial(t)} disabled={savingId === t.id}
+                  className="flex items-center gap-1.5 px-4 py-2 rounded-full gradient-bg text-white text-sm font-medium hover:opacity-90 transition disabled:opacity-50">
+                  {savingId === t.id ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Save className="w-3.5 h-3.5" />}
+                  Save
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
+      ))}
+    </div>
+  );
+};
+
 /* ── Sub-panel: Projects ─────────────────────────────────────────── */
 const ProjectsPanel = ({ data, onChange }: { data: any[]; onChange: (d: any[]) => void }) => {
   const { toast } = useToast();
@@ -793,8 +1002,15 @@ const Admin = () => {
           <div className="lg:col-span-3">
             <motion.div key={activeTab} className="glass-card rounded-2xl p-6"
               initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.2 }}>
-              <h2 className="font-semibold text-foreground mb-6 capitalize">{activeTab} Section</h2>
+              <h2 className="font-semibold text-foreground mb-6 capitalize">
+                {activeTab === "sections" ? "Section Visibility"
+                  : activeTab === "testimonials" ? "Testimonials"
+                  : `${activeTab} Section`}
+              </h2>
 
+              {activeTab === "sections" && (
+                <SectionsPanel data={data.sections ?? {}} onSave={(d) => setData({ ...data, sections: d })} />
+              )}
               {activeTab === "site" && (
                 <SitePanel data={data.site} onSave={(d) => setData({ ...data, site: d })} />
               )}
@@ -820,6 +1036,9 @@ const Admin = () => {
               )}
               {activeTab === "projects" && (
                 <ProjectsPanel data={data.projects} onChange={(d) => setData({ ...data, projects: d })} />
+              )}
+              {activeTab === "testimonials" && (
+                <TestimonialsPanel data={data.testimonials ?? []} onChange={(d) => setData({ ...data, testimonials: d })} />
               )}
             </motion.div>
           </div>

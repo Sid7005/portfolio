@@ -2,17 +2,33 @@ import { useState, useEffect } from "react";
 import { useMobile } from "@/hooks/use-mobile";
 import { useScrollToSection } from "@/hooks/useScrollToSection";
 import { useResumeDownload } from "@/hooks/useResumeDownload";
-import { Menu, X, Loader2 } from "lucide-react";
+import { Menu, X, Loader2, Sun, Moon } from "lucide-react";
 import { motion, AnimatePresence, useScroll, useSpring } from "framer-motion";
 import sidAvatarFallback from "../../assets/images/sid-avatar.png";
 
+/* ── Theme toggle hook ────────────────────────────────────────── */
+const useTheme = () => {
+  const [isDark, setIsDark] = useState(() => {
+    if (typeof window === "undefined") return true;
+    return localStorage.getItem("theme") !== "light";
+  });
+
+  useEffect(() => {
+    document.documentElement.setAttribute("data-theme", isDark ? "dark" : "light");
+    localStorage.setItem("theme", isDark ? "dark" : "light");
+  }, [isDark]);
+
+  return { isDark, toggle: () => setIsDark((v) => !v) };
+};
+
 const navLinks = [
-  { href: "#home",       label: "Home"       },
-  { href: "#about",      label: "About"      },
-  { href: "#skills",     label: "Skills"     },
-  { href: "#experience", label: "Experience" },
-  { href: "#projects",   label: "Projects"   },
-  { href: "#contact",    label: "Contact"    },
+  { href: "#home",         label: "Home"         },
+  { href: "#about",        label: "About"        },
+  { href: "#skills",       label: "Skills"       },
+  { href: "#experience",   label: "Experience"   },
+  { href: "#projects",     label: "Projects"     },
+  { href: "#testimonials", label: "Reviews"      },
+  { href: "#contact",      label: "Contact"      },
 ];
 
 type Props = { content?: any };
@@ -24,6 +40,7 @@ const Header = ({ content }: Props) => {
   const isMobile        = useMobile();
   const scrollToSection = useScrollToSection();
   const { downloadResume, loading: resumeLoading, ready: resumeReady } = useResumeDownload();
+  const { isDark, toggle: toggleTheme } = useTheme();
 
   const { scrollYProgress } = useScroll();
   const scaleX = useSpring(scrollYProgress, { stiffness: 120, damping: 30, restDelta: 0.001 });
@@ -67,9 +84,10 @@ const Header = ({ content }: Props) => {
           scrolled ? "border-b border-white/[0.06] shadow-2xl shadow-black/40" : "bg-transparent"
         }`}
         style={{
-          background: scrolled ? "rgba(5,7,18,0.88)" : "transparent",
-          backdropFilter: scrolled ? "blur(20px) saturate(180%)" : "none",
-          WebkitBackdropFilter: scrolled ? "blur(20px) saturate(180%)" : "none",
+          background:          scrolled ? "var(--header-scrolled-bg)" : "transparent",
+          borderBottomColor:   scrolled ? "var(--header-scrolled-border)" : "transparent",
+          backdropFilter:      scrolled ? "blur(20px) saturate(180%)" : "none",
+          WebkitBackdropFilter:scrolled ? "blur(20px) saturate(180%)" : "none",
         }}
         initial={{ y: -80, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
@@ -136,6 +154,28 @@ const Header = ({ content }: Props) => {
               );
             })}
           </nav>
+
+          {/* Theme toggle */}
+          <motion.button
+            onClick={toggleTheme}
+            className="hidden md:flex w-9 h-9 items-center justify-center rounded-full text-muted-foreground"
+            style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(124,58,237,0.2)" }}
+            whileHover={{ scale: 1.12, color: "#fff", borderColor: "rgba(167,139,250,0.5)" }}
+            whileTap={{ scale: 0.92 }}
+            aria-label="Toggle theme"
+          >
+            <AnimatePresence mode="wait">
+              {isDark ? (
+                <motion.span key="sun"  initial={{ rotate: -90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: 90, opacity: 0 }} transition={{ duration: 0.2 }}>
+                  <Sun  className="w-4 h-4" />
+                </motion.span>
+              ) : (
+                <motion.span key="moon" initial={{ rotate: 90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: -90, opacity: 0 }} transition={{ duration: 0.2 }}>
+                  <Moon className="w-4 h-4" />
+                </motion.span>
+              )}
+            </AnimatePresence>
+          </motion.button>
 
           {/* Resume CTA */}
           <motion.button

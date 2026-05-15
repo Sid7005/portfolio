@@ -130,6 +130,60 @@ export async function registerRoutes(app: Express): Promise<Server> {
     res.json({ isAdmin: isValidSession(getTokenFromRequest(req)) });
   });
 
+  /* ─── Forgot password ────────────────────────────────────────── */
+
+  let lastForgotAt = 0;
+  const FORGOT_COOLDOWN_MS = 60_000;
+
+  app.post("/api/admin/forgot-password", async (_req: Request, res: Response) => {
+    const now = Date.now();
+    if (now - lastForgotAt < FORGOT_COOLDOWN_MS) {
+      return res.status(429).json({ message: "Please wait a minute before requesting again." });
+    }
+
+    const serviceId  = process.env.VITE_EMAILJS_SERVICE_ID;
+    const templateId = process.env.VITE_EMAILJS_TEMPLATE_ID;
+    const publicKey  = process.env.VITE_EMAILJS_PUBLIC_KEY;
+    const privateKey = process.env.VITE_EMAILJS_PRIVATE_KEY;
+
+    if (!serviceId || !templateId || !publicKey || !privateKey) {
+      return res.status(500).json({ message: "Email service not configured. Add EMAILJS_PRIVATE_KEY to .env" });
+    }
+
+    try {
+      const emailRes = await fetch("https://api.emailjs.com/api/v1.0/email/send", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          service_id: serviceId,
+          template_id: templateId,
+          user_id: publicKey,
+          accessToken: privateKey,
+          template_params: {
+            from_name: "Portfolio Admin",
+            from_email: "noreply@portfolio",
+            subject: "Admin Password Recovery",
+            message: `Your admin panel password is:\n\n${ADMIN_PASSWORD}\n\nKeep this safe.`,
+            to_name: "Admin",
+          },
+        }),
+      });
+
+      const body = await emailRes.text();
+      console.log("[ForgotPassword] EmailJS status:", emailRes.status, "body:", body);
+
+      if (!emailRes.ok) {
+        return res.status(500).json({ message: `EmailJS error: ${body}` });
+      }
+
+      lastForgotAt = now;
+      res.json({ message: "Password sent to your email!" });
+    } catch (e: any) {
+      console.error("[ForgotPassword] fetch error:", e);
+      res.status(500).json({ message: `Failed: ${e.message}` });
+    }
+  });
+
   /* ─── Image upload ──────────────────────────────────────────── */
 
   app.post("/api/admin/upload", requireAdmin, upload.single("image"), (req: Request, res: Response) => {
@@ -212,6 +266,34 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.put("/api/admin/education", requireAdmin, (req, res) => {
     try { content.updateEducation(req.body); res.json({ message: "Updated." }); }
     catch { res.status(400).json({ message: "Invalid data." }); }
+  });
+
+  app.put("/api/admin/sections", requireAdmin, (req, res) => {
+    try { content.updateSections(req.body); res.json({ message: "Updated." }); }
+    catch { res.status(400).json({ message: "Invalid data." }); }
+  });
+
+  app.post("/api/admin/testimonials", requireAdmin, (req, res) => {
+    try {
+      const t = content.addTestimonial(req.body);
+      res.status(201).json(t);
+    } catch { res.status(400).json({ message: "Invalid data." }); }
+  });
+
+  app.put("/api/admin/testimonials/:id", requireAdmin, (req, res) => {
+    const id = parseInt(req.params.id, 10);
+    if (isNaN(id)) return res.status(400).json({ message: "Invalid id." });
+    content.updateTestimonial(id, req.body)
+      ? res.json({ message: "Updated." })
+      : res.status(404).json({ message: "Not found." });
+  });
+
+  app.delete("/api/admin/testimonials/:id", requireAdmin, (req, res) => {
+    const id = parseInt(req.params.id, 10);
+    if (isNaN(id)) return res.status(400).json({ message: "Invalid id." });
+    content.deleteTestimonial(id)
+      ? res.json({ message: "Deleted." })
+      : res.status(404).json({ message: "Not found." });
   });
 
   app.post("/api/admin/projects", requireAdmin, (req, res) => {
