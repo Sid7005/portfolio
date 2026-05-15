@@ -6,7 +6,8 @@ import {
   useTransform,
 } from "framer-motion";
 import { useScrollToSection } from "@/hooks/useScrollToSection";
-import { Download, ArrowRight, Github, Linkedin, Mail, Sparkles } from "lucide-react";
+import { useResumeDownload } from "@/hooks/useResumeDownload";
+import { Download, ArrowRight, Github, Linkedin, Mail, Sparkles, Loader2 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import heroPhoto from "../../assets/images/ImportedPhoto.760428188.70688.jpeg";
 
@@ -309,7 +310,7 @@ const TiltPhoto = ({ src, alt }: { src: string; alt: string }) => {
             style={{
               width:  "clamp(220px, 28vw, 380px)",
               height: "clamp(220px, 28vw, 380px)",
-              objectFit: "cover", objectPosition: "top center",
+              objectFit: "cover", objectPosition: "center",
             }}
           />
         </div>
@@ -325,6 +326,7 @@ type Props = { content?: any };
 
 const HeroSection = ({ content }: Props) => {
   const scrollToSection = useScrollToSection();
+  const { downloadResume, loading: resumeLoading, ready: resumeReady } = useResumeDownload();
   const hero = content?.hero;
 
   const name        = hero?.shortName ?? "Siddharajsinh";
@@ -469,14 +471,21 @@ const HeroSection = ({ content }: Props) => {
               >
                 View My Work <ArrowRight className="w-4 h-4" />
               </motion.button>
-              <motion.a href="/resume" target="_blank" rel="noopener noreferrer"
-                className="flex items-center gap-2 px-6 py-3 rounded-full text-white font-semibold text-sm"
+              <motion.button
+                onClick={downloadResume}
+                disabled={resumeLoading}
+                className="flex items-center gap-2 px-6 py-3 rounded-full text-white font-semibold text-sm disabled:opacity-70 disabled:cursor-not-allowed"
                 style={{ background: "rgba(255,255,255,0.05)", border: "1px solid rgba(124,58,237,0.35)", backdropFilter: "blur(10px)" }}
-                whileHover={{ scale: 1.06, borderColor: "rgba(167,139,250,0.6)", background: "rgba(124,58,237,0.12)" }}
-                whileTap={{ scale: 0.97 }}
+                whileHover={{ scale: resumeLoading ? 1 : 1.06, borderColor: "rgba(167,139,250,0.6)", background: "rgba(124,58,237,0.12)" }}
+                whileTap={{ scale: resumeLoading ? 1 : 0.97 }}
               >
-                <Download className="w-4 h-4" /> Download CV
-              </motion.a>
+                {!resumeReady
+                  ? <><Loader2 className="w-4 h-4 animate-spin" /> Preparing…</>
+                  : resumeLoading
+                    ? <><Loader2 className="w-4 h-4 animate-spin" /> Downloading…</>
+                    : <><Download className="w-4 h-4" /> Download CV</>
+                }
+              </motion.button>
             </motion.div>
 
             {/* Socials */}
@@ -536,7 +545,7 @@ const HeroSection = ({ content }: Props) => {
 
               {/* Open to Work */}
               <motion.div
-                className="absolute bottom-2 -right-6 sm:-right-10 z-20 flex items-center gap-2 px-3 py-2 rounded-2xl"
+                className="absolute bottom-2 right-0 sm:-right-10 z-20 flex items-center gap-2 px-3 py-2 rounded-2xl"
                 style={{ background: "rgba(7,7,26,0.94)", border: "1px solid rgba(6,182,212,0.4)", backdropFilter: "blur(16px)", animation: "badge-float 3.2s ease-in-out infinite" }}>
                 <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse flex-shrink-0" />
                 <span className="gradient-text-animated text-xs sm:text-sm font-bold font-space">Open to Work</span>

@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
 import { useMobile } from "@/hooks/use-mobile";
 import { useScrollToSection } from "@/hooks/useScrollToSection";
-import { Menu, X } from "lucide-react";
+import { useResumeDownload } from "@/hooks/useResumeDownload";
+import { Menu, X, Loader2 } from "lucide-react";
 import { motion, AnimatePresence, useScroll, useSpring } from "framer-motion";
-import resume from "../../assets/doc/Sid-Resume.pdf";
 import sidAvatarFallback from "../../assets/images/sid-avatar.png";
 
 const navLinks = [
@@ -23,6 +23,7 @@ const Header = ({ content }: Props) => {
   const [activeSection, setActiveSection]   = useState("home");
   const isMobile        = useMobile();
   const scrollToSection = useScrollToSection();
+  const { downloadResume, loading: resumeLoading, ready: resumeReady } = useResumeDownload();
 
   const { scrollYProgress } = useScroll();
   const scaleX = useSpring(scrollYProgress, { stiffness: 120, damping: 30, restDelta: 0.001 });
@@ -137,20 +138,23 @@ const Header = ({ content }: Props) => {
           </nav>
 
           {/* Resume CTA */}
-          <motion.a
-            href={resume}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="hidden md:flex items-center gap-2 px-5 py-2 rounded-full text-white text-sm font-semibold"
+          <motion.button
+            onClick={downloadResume}
+            disabled={resumeLoading}
+            className="hidden md:flex items-center gap-2 px-5 py-2 rounded-full text-white text-sm font-semibold disabled:opacity-70 disabled:cursor-not-allowed"
             style={{
               background: "linear-gradient(135deg, #7c3aed 0%, #2563eb 100%)",
               boxShadow: "0 4px 16px rgba(124,58,237,0.35)",
             }}
-            whileHover={{ scale: 1.05, boxShadow: "0 6px 24px rgba(124,58,237,0.55)" }}
-            whileTap={{ scale: 0.97 }}
+            whileHover={{ scale: resumeLoading ? 1 : 1.05, boxShadow: "0 6px 24px rgba(124,58,237,0.55)" }}
+            whileTap={{ scale: resumeLoading ? 1 : 0.97 }}
           >
-            Resume
-          </motion.a>
+            {!resumeReady
+              ? <><Loader2 className="w-3.5 h-3.5 animate-spin" /> Preparing…</>
+              : resumeLoading ? <><Loader2 className="w-3.5 h-3.5 animate-spin" /> Downloading…</>
+              : "Resume"
+            }
+          </motion.button>
 
           {/* Mobile toggle */}
           <button
@@ -187,15 +191,18 @@ const Header = ({ content }: Props) => {
                     {link.label}
                   </a>
                 ))}
-                <a
-                  href={resume}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="mt-3 py-2.5 px-4 rounded-full text-white text-center font-semibold text-sm"
+                <button
+                  onClick={() => { setMobileMenuOpen(false); downloadResume(); }}
+                  disabled={resumeLoading}
+                  className="mt-3 py-2.5 px-4 rounded-full text-white text-center font-semibold text-sm flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed"
                   style={{ background: "linear-gradient(135deg, #7c3aed, #2563eb)" }}
                 >
-                  Resume
-                </a>
+                  {!resumeReady
+                    ? <><Loader2 className="w-3.5 h-3.5 animate-spin" /> Preparing…</>
+                    : resumeLoading ? <><Loader2 className="w-3.5 h-3.5 animate-spin" /> Downloading…</>
+                    : "Resume"
+                  }
+                </button>
               </div>
             </motion.div>
           )}
