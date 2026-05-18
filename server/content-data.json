@@ -272,7 +272,12 @@
         "category": "devops"
       }
     ],
-    "alsoComfortableWith": "Bootstrap, jQuery, C#, Entity Framework, ASP.NET MVC, Razor Pages, REST / GraphQL, Stripe / Authorize.net, Google Maps API, Jest, Mocha"
+    "alsoComfortableWith": "Bootstrap, jQuery, C#, Entity Framework, ASP.NET MVC, Razor Pages, REST / GraphQL, Stripe / Authorize.net, Google Maps API, Jest, Mocha",
+    "languages": [
+      { "name": "English",  "level": "Professional Working" },
+      { "name": "Gujarati", "level": "Native" },
+      { "name": "Hindi",    "level": "Conversational" }
+    ]
   },
   "experienceMeta": {
     "highlight": "Led Stripe & Authorize.net payment integrations and Google Maps autocomplete features at ZealousWeb, improving checkout UX for thousands of users.",

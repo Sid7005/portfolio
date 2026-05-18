@@ -91,12 +91,17 @@ async function generateResumeBlobUrl(): Promise<string> {
     const data: ResumeData = await res.json();
 
     const rawPath = data.hero.heroImage;
-    const photoAbsUrl = rawPath.startsWith("http")
+    const photoAbsUrl = rawPath?.startsWith("http")
       ? rawPath
-      : `${window.location.origin}${rawPath}`;
+      : `${window.location.origin}${rawPath ?? ""}`;
 
-    const photoDataUrl = await toDataUrl(photoAbsUrl);
-    const croppedPhoto = await cropToHead(photoDataUrl);
+    let croppedPhoto = "";
+    try {
+      const photoDataUrl = await toDataUrl(photoAbsUrl);
+      croppedPhoto = await cropToHead(photoDataUrl);
+    } catch (imgErr) {
+      console.warn("Resume: could not load hero image, generating without photo:", imgErr);
+    }
 
     const element = React.createElement(ResumePDF, {
       data,
@@ -116,9 +121,21 @@ async function generateResumeBlobUrl(): Promise<string> {
   }
 }
 
+const FALLBACK_RESUME_URL = "/resume";
+
+function triggerDownload(url: string, filename: string) {
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+}
+
 export function useResumeDownload() {
   const [ready, setReady] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [useFallback, setUseFallback] = useState(false);
   const blobUrlRef = useRef<string | null>(cachedBlobUrl);
 
   // Pre-generate in background as soon as this hook mounts
@@ -126,24 +143,32 @@ export function useResumeDownload() {
     if (cachedBlobUrl) { setReady(true); return; }
     generateResumeBlobUrl()
       .then((url) => { blobUrlRef.current = url; setReady(true); })
-      .catch((err) => console.error("Resume pre-generation failed:", err));
+      .catch((err) => {
+        console.error("Resume pre-generation failed:", err);
+        setUseFallback(true);
+        setReady(true); // unblock the button so user can still download
+      });
   }, []);
 
   async function downloadResume() {
     if (loading) return;
+
+    // If pre-generation failed, fall back to the server-side /resume endpoint
+    if (useFallback) {
+      triggerDownload(FALLBACK_RESUME_URL, "Siddharajsinh_Chauhan_Resume.pdf");
+      return;
+    }
+
     setLoading(true);
     try {
       const url = blobUrlRef.current ?? await generateResumeBlobUrl();
       blobUrlRef.current = url;
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = "Siddharajsinh_Chauhan_Resume.pdf";
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
+      triggerDownload(url, "Siddharajsinh_Chauhan_Resume.pdf");
     } catch (err) {
       console.error("Resume download failed:", err);
-      alert("Could not generate resume. Please try again.");
+      // Fall back to server-side PDF rather than showing an error
+      setUseFallback(true);
+      triggerDownload(FALLBACK_RESUME_URL, "Siddharajsinh_Chauhan_Resume.pdf");
     } finally {
       setLoading(false);
     }

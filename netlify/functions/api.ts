@@ -4,6 +4,14 @@ import { createHmac, randomBytes } from "crypto";
 
 // ── Default content (seeds Blobs on first deploy) ─────────────────────────────
 const DEFAULT_CONTENT = {
+  site: {
+    logoText: "SID.",
+    logoSubtext: "Full-Stack Dev",
+    fullName: "Siddharajsinh Chauhan",
+    tagline: "Crafting scalable, beautiful web experiences with modern technologies.",
+    pageTitle: "Siddharajsinh Chauhan - Web Developer",
+    hireMeText: "Open to full-time roles and freelance projects.",
+  },
   hero: {
     greeting: "Available for opportunities",
     name: "Siddharajsinh Chauhan",
@@ -46,6 +54,12 @@ const DEFAULT_CONTENT = {
     database: ["PostgreSQL", "MSSQL", "MongoDB", "Entity Framework", "SQL Server"],
     devops: ["Git & GitHub", "Docker", "AWS", "CI/CD", "Linux", "Vite", "Webpack", "Jest", "Mocha"],
     additional: ["ReactJS", "NextJS", "TypeScript", "JavaScript", "NodeJS", "Python - FastAPI", "PostgreSQL", "MongoDB", "Bootstrap CSS", "HTML", "CSS", "ASP.NET Core", "ASP.NET MVC", "MSSQL"],
+    alsoComfortableWith: "Bootstrap, jQuery, C#, Entity Framework, ASP.NET MVC, Razor Pages, REST / GraphQL, Stripe / Authorize.net, Google Maps API, Jest, Mocha",
+    languages: [
+      { name: "English",  level: "Professional Working" },
+      { name: "Gujarati", level: "Native" },
+      { name: "Hindi",    level: "Conversational" },
+    ],
     proficiency: [
       { name: "TypeScript / JavaScript", level: 94 },
       { name: "React.js / Next.js", level: 92 },

@@ -151,6 +151,30 @@ const s = StyleSheet.create({
     borderRadius: 3,
   },
 
+  /* Also comfortable with */
+  alsoWith: {
+    color: MID,
+    fontSize: 6.5,
+    lineHeight: 1.6,
+    marginTop: 3,
+  },
+
+  /* Languages */
+  langRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginBottom: 4,
+  },
+  langName: {
+    color: DARK,
+    fontSize: 7.5,
+    fontFamily: "Helvetica-Bold",
+  },
+  langLevel: {
+    color: MUTED,
+    fontSize: 7,
+  },
+
   /* Education */
   eduItem: {
     marginBottom: 9,
@@ -321,6 +345,8 @@ export interface ResumeData {
     backend: string[];
     database: string[];
     devops: string[];
+    alsoComfortableWith?: string;
+    languages?: Array<{ name: string; level: string }>;
   };
   experience: Array<{
     position: string;
@@ -354,22 +380,25 @@ function SectionHeader({ title }: { title: string }) {
 
 export function ResumePDF({ data, photoUrl }: { data: ResumeData; photoUrl: string }) {
   const { site, hero, contact, skills, experience, education, projects } = data;
-  const linkedinShort = hero.linkedinUrl.replace("https://www.linkedin.com/in/", "linkedin.com/in/");
-  const githubShort   = hero.githubUrl.replace("https://github.com/", "github.com/");
+  const fullName = site?.fullName ?? hero?.name ?? "Resume";
+  const linkedinShort = hero.linkedinUrl?.replace("https://www.linkedin.com/in/", "linkedin.com/in/") ?? hero.linkedinUrl ?? "";
+  const githubShort   = hero.githubUrl?.replace("https://github.com/", "github.com/") ?? hero.githubUrl ?? "";
 
   return (
-    <Document title={`${site.fullName} — Resume`} author={site.fullName}>
+    <Document title={`${fullName} — Resume`} author={fullName}>
       <Page size="A4" style={s.page}>
 
         {/* ════════════ SIDEBAR ════════════ */}
         <View style={s.sidebar}>
 
           {/* Photo */}
-          <View style={s.photoRing}>
-            <Image src={photoUrl} style={s.photo} />
-          </View>
+          {photoUrl ? (
+            <View style={s.photoRing}>
+              <Image src={photoUrl} style={s.photo} />
+            </View>
+          ) : null}
 
-          <Text style={s.sbName}>{site.fullName}</Text>
+          <Text style={s.sbName}>{fullName}</Text>
           <Text style={s.sbTitle}>{hero.roles[0]}</Text>
           <View style={s.sbRule} />
 
@@ -433,6 +462,12 @@ export function ResumePDF({ data, photoUrl }: { data: ResumeData; photoUrl: stri
                 ))}
               </View>
             </View>
+            {skills.alsoComfortableWith ? (
+              <View style={s.skillGroup}>
+                <Text style={s.skillLabel}>Also comfortable with</Text>
+                <Text style={s.alsoWith}>{skills.alsoComfortableWith}</Text>
+              </View>
+            ) : null}
           </View>
 
           {/* Education */}
@@ -446,6 +481,19 @@ export function ResumePDF({ data, photoUrl }: { data: ResumeData; photoUrl: stri
               </View>
             ))}
           </View>
+
+          {/* Languages */}
+          {skills.languages?.length ? (
+            <View style={s.sbSection}>
+              <Text style={s.sbSectionTitle}>Languages</Text>
+              {skills.languages.map((lang) => (
+                <View key={lang.name} style={s.langRow}>
+                  <Text style={s.langName}>{lang.name}</Text>
+                  <Text style={s.langLevel}>{lang.level}</Text>
+                </View>
+              ))}
+            </View>
+          ) : null}
 
         </View>
 

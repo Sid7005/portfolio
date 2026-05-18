@@ -584,6 +584,11 @@ const SkillsPanel = ({ data, onSave }: { data: any; onSave: (d: any) => void }) 
   const [itemsText, setItemsText]     = useState(JSON.stringify(data.items ?? [], null, 2));
   const [profText, setProfText]       = useState(JSON.stringify(data.proficiency ?? [], null, 2));
   const [alsoText, setAlsoText]       = useState(data.alsoComfortableWith ?? "");
+  const [langText, setLangText]       = useState(JSON.stringify(data.languages ?? [
+    { name: "English",  level: "Professional Working" },
+    { name: "Gujarati", level: "Native" },
+    { name: "Hindi",    level: "Conversational" },
+  ], null, 2));
   const { toast } = useToast();
   const [saving, setSaving] = useState(false);
 
@@ -592,9 +597,10 @@ const SkillsPanel = ({ data, onSave }: { data: any; onSave: (d: any) => void }) 
     try {
       const payload = {
         ...data,
-        items:              JSON.parse(itemsText),
-        proficiency:        JSON.parse(profText),
+        items:               JSON.parse(itemsText),
+        proficiency:         JSON.parse(profText),
         alsoComfortableWith: alsoText,
+        languages:           JSON.parse(langText),
       };
       await apiFetch("/api/admin/skills", "PUT", payload);
       onSave(payload);
@@ -626,6 +632,16 @@ const SkillsPanel = ({ data, onSave }: { data: any; onSave: (d: any) => void }) 
         <label className="block text-sm text-muted-foreground mb-1.5">Also Comfortable With</label>
         <textarea rows={3} className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-foreground text-sm focus:outline-none focus:border-primary/50 transition resize-none"
           value={alsoText} onChange={(e) => setAlsoText(e.target.value)} />
+      </div>
+      <div>
+        <label className="block text-sm text-muted-foreground mb-1.5">
+          Languages — shown on Resume PDF (JSON — [{"{"}\"name\", \"level\"{"}"}])
+        </label>
+        <textarea rows={6} className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-foreground text-xs font-mono focus:outline-none focus:border-primary/50 transition resize-none"
+          value={langText} onChange={(e) => setLangText(e.target.value)} />
+        <p className="text-xs text-muted-foreground/60 mt-1">
+          e.g. [{"{"}\"name\": \"English\", \"level\": \"Professional Working\"{"}"}]
+        </p>
       </div>
       <SaveBtn saving={saving} onClick={save} />
     </div>
