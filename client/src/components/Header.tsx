@@ -21,14 +21,14 @@ const useTheme = () => {
   return { isDark, toggle: () => setIsDark((v) => !v) };
 };
 
-const navLinks = [
-  { href: "#home",         label: "Home"         },
-  { href: "#about",        label: "About"        },
-  { href: "#skills",       label: "Skills"       },
-  { href: "#experience",   label: "Experience"   },
-  { href: "#projects",     label: "Projects"     },
-  { href: "#testimonials", label: "Reviews"      },
-  { href: "#contact",      label: "Contact"      },
+const ALL_NAV_LINKS = [
+  { href: "#home",         label: "Home",       sectionKey: "hero"         },
+  { href: "#about",        label: "About",      sectionKey: "about"        },
+  { href: "#skills",       label: "Skills",     sectionKey: "skills"       },
+  { href: "#experience",   label: "Experience", sectionKey: "experience"   },
+  { href: "#projects",     label: "Projects",   sectionKey: "projects"     },
+  { href: "#testimonials", label: "Reviews",    sectionKey: "testimonials" },
+  { href: "#contact",      label: "Contact",    sectionKey: "contact"      },
 ];
 
 type Props = { content?: any };
@@ -38,6 +38,28 @@ const Header = ({ content }: Props) => {
   const [scrolled, setScrolled]             = useState(false);
   const [activeSection, setActiveSection]   = useState("home");
   const isMobile        = useMobile();
+
+  const c = content as any;
+  const isLoaded = !!c;
+  const sections = c?.sections ?? null;
+
+  function sectionHasContent(key: string): boolean {
+    if (!isLoaded) return true;
+    switch (key) {
+      case "hero":         return !!(c?.hero?.name);
+      case "about":        return !!(c?.about?.paragraphs?.length);
+      case "skills":       return !!(c?.skills?.items?.length || c?.skills?.proficiency?.length || c?.skills?.frontend?.length);
+      case "experience":   return !!(c?.experience?.length);
+      case "projects":     return !!(c?.projects?.length);
+      case "testimonials": return !!(c?.testimonials?.length);
+      case "contact":      return !!(c?.contact?.email);
+      default:             return true;
+    }
+  }
+
+  const navLinks = ALL_NAV_LINKS.filter(({ sectionKey }) =>
+    (sections === null || sections[sectionKey] !== false) && sectionHasContent(sectionKey)
+  );
   const scrollToSection = useScrollToSection();
   const { downloadResume, loading: resumeLoading, ready: resumeReady } = useResumeDownload();
   const { isDark, toggle: toggleTheme } = useTheme();

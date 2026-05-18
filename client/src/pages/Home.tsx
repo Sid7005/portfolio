@@ -20,8 +20,26 @@ const Home = () => {
     document.title = (content as any)?.site?.pageTitle ?? "Siddharajsinh Chauhan - Web Developer";
   }, [content]);
 
-  const sections = (content as any)?.sections ?? {};
-  const show = (key: string) => sections[key] !== false;
+  const c = content as any;
+  const isLoaded = !!c;
+  const sections = c?.sections ?? null;
+
+  function sectionHasContent(key: string): boolean {
+    if (!isLoaded) return true;
+    switch (key) {
+      case "hero":         return !!(c?.hero?.name);
+      case "about":        return !!(c?.about?.paragraphs?.length);
+      case "skills":       return !!(c?.skills?.items?.length || c?.skills?.proficiency?.length || c?.skills?.frontend?.length);
+      case "experience":   return !!(c?.experience?.length);
+      case "projects":     return !!(c?.projects?.length);
+      case "testimonials": return !!(c?.testimonials?.length);
+      case "contact":      return !!(c?.contact?.email);
+      default:             return true;
+    }
+  }
+
+  const show = (key: string) =>
+    (sections === null || sections[key] !== false) && sectionHasContent(key);
 
   return (
     <div className="min-h-screen">
