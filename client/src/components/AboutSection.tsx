@@ -114,7 +114,6 @@ const AboutSection = ({ content }: Props) => {
   const infoItems = [
     { icon: MapPin, label: "Location", value: location },
     { icon: Mail,   label: "Email",    value: email    },
-    { icon: Phone,  label: "Phone",    value: phone    },
   ];
 
   return (

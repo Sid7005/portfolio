@@ -51,7 +51,6 @@ const ContactSection = ({ content }: Props) => {
   const contactItems = [
     { icon: MapPin, label: "Location", value: location,               href: undefined         },
     { icon: Mail,   label: "Email",    value: email,                   href: `mailto:${email}` },
-    { icon: Phone,  label: "Phone",    value: phone,                   href: `tel:${phone.replace(/\s/g, "")}` },
   ];
 
   const socialLinks = [

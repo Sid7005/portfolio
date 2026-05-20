@@ -260,7 +260,6 @@ const SkillsSection = ({ content }: Props) => {
                 transition={{ duration: 0.5, delay: i * 0.1 }}>
                 <div className="flex justify-between items-center mb-2">
                   <span className="text-sm text-foreground font-medium">{name}</span>
-                  <span className="text-xs text-muted-foreground font-mono">{level}%</span>
                 </div>
                 <div className="h-2 w-full rounded-full overflow-hidden" style={{ background: "rgba(255,255,255,0.05)" }}>
                   <motion.div
